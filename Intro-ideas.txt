@@ -1,0 +1,17 @@
+Starting room:
+
+Stationary camera.
+Black border walls that fade to dark blue in the center. (Cinematic View)
+You are positioned at the top almost fully left of a hallway.
+The grandmother is near the top middle-right of the hallway.
+She says “We need to carry on.”
+You can walk around the whole room that looks like you can continue left or right.
+The grandmother will keep saying lines until you walk behind the wheelchair.
+Your character automatically attaches to the wheelchair and you push the grandmother.
+The camera centers on the two of you as you move around the room. No longer static.
+The grandmother directs you as you move through a maze-like dark area.
+
+Can “Meet” some people along the way (2 maximum).
+
+As you move, you start to understand the world around you. 
+You can let go of the grandmother at any time and you may have to to get to certain parts of the map on your own (the two of you combined have a larger hitbox than just yourself).
