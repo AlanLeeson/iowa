@@ -70,7 +70,7 @@ app.Main = {
 		this.gameObject.setMenu(this.menu);
 
 		/*** Initialize world and its conditions ***/
-		this.loadedForces = [vec2.fromValues(0.2,0.5)];
+		this.loadedForces = [vec2.fromValues(0.0,0.0)];
 		this.world = new app.World(this.loadedForces);
 		this.gameObject.setWorld(this.world);
 
@@ -78,6 +78,37 @@ app.Main = {
 		var entity = new app.Entity(this.bounds.width / 2, 0, 15, app.draw.randomRGBA, 1, 'moveable');
 		entity.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
 		this.world.addEntity(entity);
+		
+		/*** Create a Player ***/
+		var player = new app.PlayerEntity(this.bounds.width/2, this.bounds.height/2, 15, app.draw.randomRGBA, 1, 'moveable');
+		player.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
+		var playerController = new app.KeyboardController();
+		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
+		{
+			entity.moveLeft([vec2.fromValues(-0.3, 0)]);
+		});
+		playerController.assignKeyAction([ "d", "ArrowRight" ], function(entity)
+		{
+			entity.moveRight([vec2.fromValues(0.3, 0)]);
+		});
+		playerController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
+		{
+			entity.stopRightLeft();
+		});
+		playerController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
+		{
+			entity.moveUp([vec2.fromValues(0, -0.3)]);
+		});
+		playerController.assignKeyAction([ "s", "ArrowDown"], function (entity)
+		{
+			entity.moveDown([vec2.fromValues(0, 0.3)]);
+		});
+		playerController.assignKeyUpAction([ "w", "ArrowUp", "s", "ArrowDown"], function (entity)
+		{
+			entity.stopUpDown();
+		})
+		player.setController(playerController);
+		this.world.addEntity(player);
 
 		//call the game loop to start the game
 		this.gameLoop();
