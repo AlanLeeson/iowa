@@ -74,11 +74,6 @@ app.Main = {
 		this.world = new app.World(this.loadedForces);
 		this.gameObject.setWorld(this.world);
 
-		/*** Create an Entity ***/
-		var entity = new app.Entity(this.bounds.width / 2, 0, 15, app.draw.randomRGBA, 1, 'moveable');
-		entity.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
-		this.world.addEntity(entity);
-		
 		/*** Create a Player ***/
 		var player = new app.PlayerEntity(this.bounds.width/2, this.bounds.height/2, 15, app.draw.randomRGBA, 1, 'moveable');
 		player.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
