@@ -4,74 +4,87 @@ var app = app || {};
 
 app.Camera = function(){
 
-  var AXIS = {
-		NONE: "none",
-		HORIZONTAL: "horizontal",
-		VERTICAL: "vertical",
-		BOTH: "both"
-	};
-
-  var Camera = function (xView, yView, canvasWidth, canvasHeight, worldWidth, worldHeight)
-  {
-    this.xView = xView || 0;
-    this.yView = yView || 0;
-    this.xDeadZone = 0;
-    this.yDeadZone = 0;
-    this.wView = canvasWidth;
-    this.hView = canvasHeight;
-    this.axis = AXIS.BOTH;
-    this.followed = null;
-    this.viewportRect = new app.helpers.rectangle(this.xView, this.yView, this.wView, this.hView);
-    this.worldRect = new app.helpers.rectangle(0, 0, worldWidth, worldHeight);
+  var Camera = function(ctx, settings) {
+    settings = settings || {};
+    this.distance = 1250.0;
+    this.lookat = [0,0];
+    this.context = ctx;
+    this.fieldOfView = settings.fieldOfView || Math.PI / 4.0;
+    this.viewport = {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: 0,
+      height: 0,
+      scale: [1.0, 1.0]
+    };
+    this.updateViewport();
+    this.follow = null;
   };
 
   var p = Camera.prototype;
 
-  p.follow = function(gameObject, xDeadZone, yDeadZone)
-  {
-    this.followed = gameObject;
-    this.xDeadZone = xDeadZone;
-    this.yDeadZone = yDeadZone;
+  p.begin = function() {
+      this.context.save();
+      this.applyScale();
+      this.applyTranslation();
+      if (this.follow != null) {
+        this.moveTo(this.follow.location[0], this.follow.location[1]);
+      }
   };
 
-  p.update = function()
-  {
-    // keep following the player (or other desired object)
-    if(this.followed != null)
-    {
-      if(this.axis == AXIS.HORIZONTAL || this.axis == AXIS.BOTH)
-      {
-        // moves camera on horizontal axis based on followed object position
-        if(this.followed.x - this.xView  + this.xDeadZone > this.wView)
-          this.xView = this.followed.x - (this.wView - this.xDeadZone);
-        else if(this.followed.x  - this.xDeadZone < this.xView)
-          this.xView = this.followed.x  - this.xDeadZone;
+  p.end = function() {
+      this.context.restore();
+  };
 
-      }
-      if(this.axis == AXIS.VERTICAL || this.axis == AXIS.BOTH)
-      {
-        // moves camera on vertical axis based on followed object position
-        if(this.followed.y - this.yView + this.yDeadZone > this.hView)
-          this.yView = this.followed.y - (this.hView - this.yDeadZone);
-        else if(this.followed.y - this.yDeadZone < this.yView)
-          this.yView = this.followed.y - this.yDeadZone;
-      }
-      // update viewportRect
-			this.viewportRect.set(this.xView, this.yView);
+  p.applyScale = function() {
+    this.context.scale(this.viewport.scale[0], this.viewport.scale[1]);
+  };
 
-			// don't let camera leaves the world's boundary
-			if(!this.viewportRect.within(this.worldRect))
-			{
-				if(this.viewportRect.left < this.worldRect.left)
-					this.xView = this.worldRect.left;
-				if(this.viewportRect.top < this.worldRect.top)
-					this.yView = this.worldRect.top;
-				if(this.viewportRect.right > this.worldRect.right)
-					this.xView = this.worldRect.right - this.wView;
-				if(this.viewportRect.bottom > this.worldRect.bottom)
-					this.yView = this.worldRect.bottom - this.hView;
-			}
-    }
+  p.applyTranslation = function() {
+    this.context.translate(-this.viewport.left, -this.viewport.top);
+  };
+
+  p.updateViewport = function() {
+      this.aspectRatio = this.context.canvas.width / this.context.canvas.height;
+      this.viewport.width = this.distance * Math.tan(this.fieldOfView);
+      this.viewport.height = this.viewport.width / this.aspectRatio;
+      this.viewport.left = this.lookat[0] - (this.viewport.width / 2.0);
+      this.viewport.top = this.lookat[1] - (this.viewport.height / 2.0);
+      this.viewport.right = this.viewport.left + this.viewport.width;
+      this.viewport.bottom = this.viewport.top + this.viewport.height;
+      this.viewport.scale[0] = this.context.canvas.width / this.viewport.width;
+      this.viewport.scale[1] = this.context.canvas.height / this.viewport.height;
+  };
+
+  p.zoomTo = function(z) {
+      this.distance = z;
+      this.updateViewport();
+  };
+
+  p.moveTo = function(x, y) {
+      this.lookat[0] = x;
+      this.lookat[1] = y;
+      this.updateViewport();
+  };
+
+  p.followEntity = function(followee){
+    this.follow = followee;
+  };
+
+  p.screenToWorld = function(x, y, obj) {
+      obj = obj || {};
+      obj.x = (x / this.viewport.scale[0]) + this.viewport.left;
+      obj.y = (y / this.viewport.scale[1]) + this.viewport.top;
+      return obj;
+  };
+
+  p.worldToScreen = function(x, y, obj) {
+      obj = obj || {};
+      obj.x = (x - this.viewport.left) * (this.viewport.scale[0]);
+      obj.y = (y - this.viewport.top) * (this.viewport.scale[1]);
+      return obj;
   };
 
   return Camera;
