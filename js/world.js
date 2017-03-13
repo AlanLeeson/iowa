@@ -9,11 +9,13 @@ app.World = function(){
 
 		this.forces = forces;
 
-    	this.entities = [];
+    this.entities = [];
 
 		this.updateFunction = null;
 		this.backgroundSprite = undefined;
+		this.campera = null;
 		this.currentState = 2;
+		this.map = null;
 	};
 
 	var p = World.prototype;
@@ -35,8 +37,16 @@ app.World = function(){
 		};
 
 		p.setBackgroundSprite = function(sprite){
-		this.backgroundSprite = sprite;
-	};
+			this.backgroundSprite = sprite;
+		};
+
+		p.setCamera = function(camera){
+			this.camera = camera;
+		};
+
+		p.setMap = function(map){
+			this.map = map;
+		};
 
 		p.doUpdateFunction = function(){
 			if (this.updateFunction !== null) {
@@ -81,13 +91,15 @@ app.World = function(){
     };
 
     p.render = function(ctx){
-			if (this.backgroundSprite !== undefined) {
-				this.backgroundSprite.render(ctx, vec2.fromValues(this.worldBounds.width / 2, this.worldBounds.height / 2));
+			this.camera.begin();
+			if (this.map !== null) {
+				this.map.render(ctx, 10000, 6000);
 			}
 			for(var i = 0; i < this.entities.length; i++)
 			{
 				this.entities[i].render(ctx);
 			}
+			this.camera.end();
     };
 
 

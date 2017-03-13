@@ -74,13 +74,8 @@ app.Main = {
 		this.world = new app.World(this.loadedForces);
 		this.gameObject.setWorld(this.world);
 
-		/*** Create an Entity ***/
-		var entity = new app.Entity(this.bounds.width / 2, 0, 15, app.draw.randomRGBA, 1, 'moveable');
-		entity.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
-		this.world.addEntity(entity);
-		
 		/*** Create a Player ***/
-		var player = new app.PlayerEntity(this.bounds.width/2, this.bounds.height/2, 15, app.draw.randomRGBA, 1, 'moveable');
+		var player = new app.PlayerEntity(this.bounds.width/2, this.bounds.height/2, 15, app.draw.randomRGBA(), 1, 'moveable');
 		player.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
 		var playerController = new app.KeyboardController();
 		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
@@ -109,6 +104,17 @@ app.Main = {
 		})
 		player.setController(playerController);
 		this.world.addEntity(player);
+		this.world.addEntity(new app.Entity(this.bounds.width/2,0,20,app.draw.randomRGBA(),1,"moveable"))
+
+		/*** Initialize the camera ***/
+		var room = {
+			width: 10000,
+			height: 6000,
+			map: new app.Map(10000, 6000)
+		};
+		var camera = new app.Camera(this.ctx);
+		camera.followEntity(player);
+		this.world.setCamera(camera);
 
 		//call the game loop to start the game
 		this.gameLoop();
