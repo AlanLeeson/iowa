@@ -52,6 +52,8 @@ app.Menu = function(){
 	p.render = function(ctx){
 		if (this.backgroundSprite != undefined) {
 			this.backgroundSprite.render(ctx, this.size);
+		} else {
+			app.draw.rect(ctx, 0, 0, app.Main.screenBounds.width, app.Main.screenBounds.height, '#ffccab');
 		}
 		for(var i = 0; i < this.texts.length; i ++) {
 			var text = this.texts[i];

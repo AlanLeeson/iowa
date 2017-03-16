@@ -9,7 +9,7 @@ app.Main = {
 
 	loadedForces : undefined,
 	world : undefined,
-	bounds : undefined,
+	screenBounds : undefined,
 	gameObject : undefined,
 	menu : undefined,
 
@@ -23,11 +23,19 @@ app.Main = {
 		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
 		this.canvas.style.width = window.innerWidth + 'px';
-        this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
+    this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
 		this.ctx = this.canvas.getContext('2d');
 
+		/*** Initialize the first room ***/
+		var room = {
+			width: 2000,
+			height: 1000,
+			map: new app.Map(2000, 1000)
+		};
+		room.map.generate(this.ctx);
+
 		/*** Set up the game object which holds game logic and states. ***/
-		this.bounds = {width : this.canvas.width, height: this.canvas.height};
+		this.screenBounds = {width : this.canvas.width, height: this.canvas.height};
 		this.gameObject = new app.GameObject();
 		this.gameObject.setCurrentState("MENU");
 
@@ -58,12 +66,11 @@ app.Main = {
 		this.gameObject.setController(keyboardController);
 
 		/*** Initialize menu ***/
-		this.menu = new app.Menu("main", vec2.fromValues(this.bounds.width / 2, this.bounds.height / 2));
-		this.menu.setBackgroundSprite(new app.Sprite('menuBackground.jpg', [0, 0], [1440, 785], [this.bounds.width, this.bounds.height], 0, [0]));
+		this.menu = new app.Menu("main", vec2.fromValues(this.screenBounds.width / 2, this.screenBounds.height / 2));
 		this.menu.addText({
 			"text" : "Press \"m\" to Play",
-			"xPos" : (this.bounds.width * 3 / 10),
-			"yPos" : (this.bounds.height * 5 / 6),
+			"xPos" : (this.screenBounds.width * 3 / 10),
+			"yPos" : (this.screenBounds.height * 5 / 6),
 			"size" : "50",
 			"col" : app.draw.randomRGBA(100)
 		});
@@ -75,8 +82,8 @@ app.Main = {
 		this.gameObject.setWorld(this.world);
 
 		/*** Create a Player ***/
-		var player = new app.PlayerEntity(this.bounds.width/2, this.bounds.height/2, 15, app.draw.randomRGBA(), 1, 'moveable');
-		player.assignBounds(0, this.bounds["width"], this.bounds["height"], 0);
+		var player = new app.PlayerEntity(room.width/2, room.height/2, 15, app.draw.randomRGBA(), 1, 'moveable');
+		player.assignBounds(0, room.width, room.height, 0);
 		var playerController = new app.KeyboardController();
 		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
@@ -104,17 +111,13 @@ app.Main = {
 		})
 		player.setController(playerController);
 		this.world.addEntity(player);
-		this.world.addEntity(new app.Entity(this.bounds.width/2,0,20,app.draw.randomRGBA(),1,"moveable"))
+		this.world.addEntity(new app.Entity(this.screenBounds.width/2,50,20,app.draw.randomRGBA(),1,"moveable"))
 
 		/*** Initialize the camera ***/
-		var room = {
-			width: 10000,
-			height: 6000,
-			map: new app.Map(10000, 6000)
-		};
 		var camera = new app.Camera(this.ctx);
 		camera.followEntity(player);
 		this.world.setCamera(camera);
+		this.world.setRoom(room);
 
 		//call the game loop to start the game
 		this.gameLoop();

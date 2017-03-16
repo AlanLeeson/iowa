@@ -67,7 +67,7 @@ app.draw = {
 		ctx.globalAlpha = 1.0;
 	},
 
-	randomRGBA : function(high = 255, low = 0, alpha = 1) {
+	randomRGBA : function(high = 255, low = 0, alpha = 1){
 		high = high > 255 || high < 0 ? 255 : high;
 		low = low < 0 || low > 255 ? 0 : low;
 		alpha = alpha < 0 || alpha > 1 ? 1 : alpha;

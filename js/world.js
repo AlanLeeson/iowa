@@ -15,7 +15,7 @@ app.World = function(){
 		this.backgroundSprite = undefined;
 		this.campera = null;
 		this.currentState = 2;
-		this.map = null;
+		this.room = null;
 	};
 
 	var p = World.prototype;
@@ -44,8 +44,8 @@ app.World = function(){
 			this.camera = camera;
 		};
 
-		p.setMap = function(map){
-			this.map = map;
+		p.setRoom = function(room){
+			this.room = room;
 		};
 
 		p.doUpdateFunction = function(){
@@ -92,8 +92,8 @@ app.World = function(){
 
     p.render = function(ctx){
 			this.camera.begin();
-			if (this.map !== null) {
-				this.map.render(ctx, 10000, 6000);
+			if (this.room !== null) {
+				this.room.map.render(ctx);
 			}
 			for(var i = 0; i < this.entities.length; i++)
 			{
