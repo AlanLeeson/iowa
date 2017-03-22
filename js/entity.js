@@ -4,10 +4,10 @@ var app = app || {};
 
 app.Entity = function(){
 
-	var Entity = function(x,y,radius,col,mass,type){
+	var Entity = function(x,y,vertices,col,mass,type){
 		this.type = type;
 		this.col = col;
-		this.radius = radius;
+
 		this.location = vec2.fromValues(x,y);
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
@@ -16,8 +16,10 @@ app.Entity = function(){
 		this.sprite = null;
 		this.controller = null;
 
+		//array of vec2 points
+		this.vertices = vertices;
+
 		this.removeCondition = null;
-		this.bounds = null;
 		this.listeners = [];
 	};
 
@@ -41,10 +43,6 @@ app.Entity = function(){
 		return this.location;
 	}
 
-	p.getRadius = function(){
-		return this.radius;
-	}
-
 	p.setController = function(controller){
 		this.controller = controller;
 		this.controller.init();
@@ -63,34 +61,6 @@ app.Entity = function(){
 			return false;
 	};
 
-	p.assignBounds = function(top, right, bottom, left){
-		this.bounds = {"top" : top, "right" : right, "bottom" : bottom, "left" : left};
-	}
-
-	p.respectBounds = function(dt)
-	{
-		if (this.bounds !== null)
-		{
-			var speed = this.movementSpeed * dt;
-			if((this.location[0] + this.radius) >= this.bounds["right"]){
-				this.velocity[0] *= -speed;
-				this.location[0] = this.bounds["right"] - this.radius;
-			}
-			if((this.location[0] - this.radius) <= this.bounds["left"]){
-				this.velocity[0] *= -speed;
-				this.location[0] = this.bounds["left"] + this.radius;
-			}
-			if((this.location[1] + this.radius) > this.bounds["bottom"]){
-				this.velocity[1] *= -speed;
-				this.location[1] = this.bounds["bottom"] - this.radius;
-			}
-			if((this.location[1] - this.radius) <= this.bounds["top"]){
-				this.velocity[1] *= -speed;
-				this.location[1] = this.bounds["top"] + this.radius;
-			}
-		}
-	}
-
 	p.update = function(dt){
 		if(this.controller !== null){
 			this.controller.update(this);
@@ -102,22 +72,18 @@ app.Entity = function(){
 		switch(this.type) {
 			case 'moveable' :
 
-				this.respectBounds(dt);
-
 				updateLocation(this.velocity,this.acceleration,this.location);
 				this.acceleration = vec2.create();
 
 				break;
 			case 'stationary' :
 				break;
-
 		}
-
 	};
 
 	p.render = function(ctx){
 		if(this.sprite != null){this.sprite.render(ctx, this.location); }
-		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
+		app.draw.polygon(ctx,this.location[0],this.location[1],this.vertices,this.col);
 	};
 
 	p.applyWorldForces = function(wolrdForces){
