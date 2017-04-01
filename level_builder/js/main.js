@@ -12,6 +12,8 @@ app.Main = {
 	screenBounds : undefined,
 	gameObject : undefined,
 	menu : undefined,
+	builder : undefined,
+	mousepos : undefined,
 
 	//var used for finding dt
 	updatedTime : 0,
@@ -32,10 +34,16 @@ app.Main = {
 		};
 		room.map.generate(this.ctx);
 
+		/*** Initliaze level builder ***/
+		this.builder = new app.Builder();
+		this.world = new app.World(this.loadedForces);
+
 		/*** Set up the game object which holds game logic and states. ***/
 		this.screenBounds = {width : this.canvas.width, height: this.canvas.height};
 		this.gameObject = new app.GameObject();
 		this.gameObject.setCurrentState("MENU");
+
+		var camera = new app.Camera(this.ctx);
 
 		/*** Set up a generic keyboard controller to handle customizable inputs ***/
 		var keyboardController = new app.KeyboardController();
@@ -62,18 +70,37 @@ app.Main = {
 			}
 		}, true);
 
+		var _builder = this.builder;
+		keyboardController.assignKeyAction(["1"], function (gameObject)
+		{
+			_builder.assignAsset(document.getElementById("image1"))
+		}, true);
+
 		var mouseController = new app.mouseController();
+		var _mouseController = mouseController;
 		mouseController.assignMouseDownAction(function (gameObject) {
 		    console.log('held');
 		});
+		var _world = this.world;
 		mouseController.assignMouseClickAction(function (gameObject) {
-		    console.log('clicked');
+		    if (_builder.image != null)
+			{
+				console.log(_builder.image.src);
+				var entity_pos = _mouseController.canvasMousePosition();
+				var new_entity = new app.Entity(entity_pos[0], entity_pos[1], 3, "", 1, "stationary");
+				new_entity.setSprite(new app.Sprite("assets/tile1.png", [0, 0], [200, 200], [50, 50], 0, [0]));
+				_world.addEntity(new_entity);
+			}
+		});
+		var _camera = camera;
+		mouseController.assignMouseMoveAction(function (gameObject) {
+			_mouseController.setCanvasOffset(_camera.getViewport());
+			_builder.assignMouseLocation(_mouseController.mousePosition());
 		});
 		this.gameObject.setController(mouseController);
 		this.gameObject.setController(keyboardController);
 
 		/*** Initialize world and its conditions ***/
-		this.world = new app.World(this.loadedForces);
 		this.gameObject.setWorld(this.world);
 
 		/*** Create a Player ***/
@@ -82,11 +109,11 @@ app.Main = {
 		var playerController = new app.KeyboardController();
 		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
-			entity.moveLeft([vec2.fromValues(-0.3, 0)]);
+			entity.moveLeft([vec2.fromValues(-0.5, 0)]);
 		});
 		playerController.assignKeyAction([ "d", "ArrowRight" ], function(entity)
 		{
-			entity.moveRight([vec2.fromValues(0.3, 0)]);
+			entity.moveRight([vec2.fromValues(0.5, 0)]);
 		});
 		playerController.assignKeyUpAction([ "a", "ArrowLeft", "d", "ArrowRight" ], function(entity)
 		{
@@ -94,11 +121,11 @@ app.Main = {
 		});
 		playerController.assignKeyAction([ "w", "ArrowUp" ], function(entity)
 		{
-			entity.moveUp([vec2.fromValues(0, -0.3)]);
+			entity.moveUp([vec2.fromValues(0, -0.5)]);
 		});
 		playerController.assignKeyAction([ "s", "ArrowDown"], function (entity)
 		{
-			entity.moveDown([vec2.fromValues(0, 0.3)]);
+			entity.moveDown([vec2.fromValues(0, 0.5)]);
 		});
 		playerController.assignKeyUpAction([ "w", "ArrowUp", "s", "ArrowDown"], function (entity)
 		{
@@ -109,7 +136,6 @@ app.Main = {
 		this.world.addEntity(new app.Entity(this.screenBounds.width/2,50,20,app.draw.randomRGBA(),1,"moveable"))
 
 		/*** Initialize the camera ***/
-		var camera = new app.Camera(this.ctx);
 		camera.followEntity(player);
 		this.world.setCamera(camera);
 		this.world.setRoom(room);
@@ -130,6 +156,7 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
+		this.builder.render(ctx);
 	},
 
 	//updates the objects in the game
@@ -152,6 +179,11 @@ app.Main = {
 	//helper function to stop values from exceeding bounds
 	clamp : function(val,min,max){
 		return Math.max(min,Math.min(max,val));
+	},
+
+	//helper function to get mouse coordinates
+	mousepos : function () {
+
 	}
 
 };

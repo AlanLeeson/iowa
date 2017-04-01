@@ -87,6 +87,10 @@ app.Camera = function(){
       return obj;
   };
 
+  p.getViewport = function () {
+      return this.viewport;
+  };
+
   return Camera;
 
 }();

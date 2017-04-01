@@ -39,7 +39,7 @@ app.World = function(){
 	};
 
     p.addEntity = function(entity){
-				entity.addUpdateListener(this);
+		entity.addUpdateListener(this);
         this.entities.push(entity);
     };
 

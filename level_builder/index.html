@@ -15,6 +15,11 @@
 		canvas{
 			display:inline;
 			background:#eee;
+			cursor: none;
+		}
+
+		canvas : hover {
+			cursor: none;
 		}
 
 		#canvasContainer{
@@ -74,6 +79,7 @@
 	<script src="js/camera.js"></script>
 	<script src="js/world.js"></script>
 	<script src="js/map.js"></script>
+	<script src="js/levelBuilder.js"></script>
 
 
 <head>
@@ -93,7 +99,7 @@
 		<div id="itemWrapper">
 			<div id="item">
 				<p class="number">1</p>
-				<img class="itemImage" src="assets/tile1.png" width="50px", height="50px"/>
+				<img id="image1" class="itemImage" src="assets/tile1.png" width="50px", height="50px"/>
 			</div>
 			<div id="item">
 				<p class="number">2	</p>
