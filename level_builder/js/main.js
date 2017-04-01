@@ -15,22 +15,20 @@ app.Main = {
 
 	//var used for finding dt
 	updatedTime : 0,
-	ratio : undefined,
 
 	init : function(){
 
 		/*** Assign the canvas and the canvas context ***/
-		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
 		this.canvas.style.width = window.innerWidth + 'px';
-    	this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
+    	this.canvas.style.height = window.innerHeight + 'px';
 		this.ctx = this.canvas.getContext('2d');
 
 		/*** Initialize the first room ***/
 		var room = {
 			width: 2000,
-			height: 1000,
-			map: new app.Map(2000, 1000)
+			height: 2000,
+			map: new app.Map(2000, 2000)
 		};
 		room.map.generate(this.ctx);
 
@@ -63,21 +61,18 @@ app.Main = {
 				gameObject.setCurrentState("PLAY");
 			}
 		}, true);
+
+		var mouseController = new app.mouseController();
+		mouseController.assignMouseDownAction(function (gameObject) {
+		    console.log('held');
+		});
+		mouseController.assignMouseClickAction(function (gameObject) {
+		    console.log('clicked');
+		});
+		this.gameObject.setController(mouseController);
 		this.gameObject.setController(keyboardController);
 
-		/*** Initialize menu ***/
-		this.menu = new app.Menu("main", vec2.fromValues(this.screenBounds.width / 2, this.screenBounds.height / 2));
-		this.menu.addText({
-			"text" : "Press \"m\" to Play",
-			"xPos" : (this.screenBounds.width * 3 / 10),
-			"yPos" : (this.screenBounds.height * 5 / 6),
-			"size" : "50",
-			"col" : app.draw.randomRGBA(100)
-		});
-		this.gameObject.setMenu(this.menu);
-
 		/*** Initialize world and its conditions ***/
-		this.loadedForces = [vec2.fromValues(0.0,0.0)];
 		this.world = new app.World(this.loadedForces);
 		this.gameObject.setWorld(this.world);
 
