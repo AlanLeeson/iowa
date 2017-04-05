@@ -73,30 +73,27 @@ app.Main = {
 		var _builder = this.builder;
 		keyboardController.assignKeyAction(["1"], function (gameObject)
 		{
-			_builder.assignAsset(document.getElementById("image1"))
+			_builder.assignAsset(new app.Sprite("assets/tile2.png", [0, 0], [200, 200], [50, 50], 0, [0]));
 		}, true);
 
 		var mouseController = new app.mouseController();
 		var _mouseController = mouseController;
-		mouseController.assignMouseDownAction(function (gameObject) {
-		    console.log('held');
-		});
 		var _world = this.world;
 		mouseController.assignMouseClickAction(function (gameObject) {
-		    if (_builder.image != null)
+		    if (_builder.sprite != null)
 			{
-				console.log(_builder.image.src);
 				var entity_pos = _mouseController.canvasMousePosition();
 				var new_entity = new app.Entity(entity_pos[0], entity_pos[1], 3, "", 1, "stationary");
-				new_entity.setSprite(new app.Sprite("assets/tile1.png", [0, 0], [200, 200], [50, 50], 0, [0]));
+				new_entity.setSprite(new app.Sprite("assets/tile2.png", [0, 0], [200, 200], [50, 50], 0, [0]));
 				_world.addEntity(new_entity);
 			}
 		});
 		var _camera = camera;
 		mouseController.assignMouseMoveAction(function (gameObject) {
 			_mouseController.setCanvasOffset(_camera.getViewport());
-			_builder.assignMouseLocation(_mouseController.mousePosition());
+			_builder.assignMouseLocation(_mouseController.canvasMousePosition());
 		});
+		this.world.addEntity(this.builder);
 		this.gameObject.setController(mouseController);
 		this.gameObject.setController(keyboardController);
 
@@ -156,7 +153,7 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
-		this.builder.render(ctx);
+		//this.builder.render(ctx);
 	},
 
 	//updates the objects in the game

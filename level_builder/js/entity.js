@@ -117,10 +117,9 @@ app.Entity = function(){
 
 	p.render = function(ctx){
 		if(this.sprite != null) {
-			//console.log(this.sprite);
 			this.sprite.render(ctx, this.location);
 		} else {
-		app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
+			app.draw.polygon(ctx,this.location[0],this.location[1],this.radius,8,this.col);
 		}
 	};
 

@@ -4,8 +4,8 @@ var app = app || {};
 
 app.Builder = function () {
 
-    var Builder = function (image = null) {
-        this.image = image;
+    var Builder = function (sprite = null) {
+        this.sprite = sprite;
         this.mouselocation = vec2.create();
     };
 
@@ -13,7 +13,7 @@ app.Builder = function () {
 
     p.assignAsset = function (asset)
     {
-        this.image = asset;
+        this.sprite = asset;
     };
 
     p.assignMouseLocation = function (mouse)
@@ -26,10 +26,20 @@ app.Builder = function () {
 
     };
 
+    p.addUpdateListener = function ()
+    {
+
+    };
+
+    p.canRemove = function ()
+    {
+        return false;
+    };
+
     p.render = function (ctx) {
-        if (this.image != null)
+        if (this.sprite != null)
         {
-            ctx.drawImage(this.image, this.mouselocation[0], this.mouselocation[1], 50, 50);
+            this.sprite.render(ctx, this.mouselocation);
         }
     };
 
