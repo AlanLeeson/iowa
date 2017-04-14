@@ -50,7 +50,7 @@ app.draw = {
 		ctx.stroke();
 	},
 
-	polygon : function(ctx,x,y,r,s,col){
+	polygonCircle : function(ctx,x,y,r,s,col){
 		ctx.strokeStyle = col;
 		ctx.fillStyle = col;
 		ctx.lineWidth = 2;
@@ -61,6 +61,23 @@ app.draw = {
 				y + r * Math.sin(i * 2 * Math.PI / s));
 		}
 		ctx.lineTo(x+r*Math.cos(0),y+r*Math.sin(0));
+		ctx.stroke();
+		ctx.globalAlpha = 0.5;
+		ctx.fill();
+		ctx.globalAlpha = 1.0;
+	},
+
+	polygon : function(ctx,x,y,vertices,col){
+		ctx.strokeStyle = col;
+		ctx.fillStyle = col;
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		ctx.moveTo(x + vertices[0][0], y + vertices[0][1]);
+		for(var i = 1; i < vertices.length; i++){
+			var vertex = vertices[i];
+			ctx.lineTo(x + vertex[0], y + vertex[1]);
+		}
+		ctx.lineTo(x + vertices[0][0], y + vertices[0][1]);
 		ctx.stroke();
 		ctx.globalAlpha = 0.5;
 		ctx.fill();

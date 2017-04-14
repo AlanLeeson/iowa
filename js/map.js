@@ -35,7 +35,7 @@ app.Map = function(){
 			ctx.restore();
 
 			// store the generate map as this image texture
-			this.sprite = new Image();
+		  this.sprite = new Image();
 			this.sprite.src = ctx.canvas.toDataURL("image/png");
   };
 
