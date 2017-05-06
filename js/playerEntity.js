@@ -18,7 +18,7 @@ app.PlayerEntity = function(){
   PlayerEntity.prototype = Object.create(app.Entity.prototype);
   PlayerEntity.prototype.construction = PlayerEntity;
   var p = PlayerEntity.prototype;
-  
+
   p.moveLeft = function(force){
   	if(this.velocity[0] > 0) {this.velocity = vec2.fromValues(0, this.velocity[1]);}
 	if(this.velocity[0] < this.terminalLeftVel){
@@ -52,23 +52,15 @@ app.PlayerEntity = function(){
 
   p.moveUp = function(force){
     if(this.velocity[1] > 0) {this.velocity = vec2.fromValues(this.velocity[0], 0);}
-	if(this.velocity[1] < this.terminalUpVel){
-		this.velocity = vec2.fromValues(this.velocity[0], this.terminalUpVel);
-	} else {
-		this.applyWorldForces(force);
-	}
+  	if(this.velocity[1] < this.terminalUpVel){
+  		this.velocity = vec2.fromValues(this.velocity[0], this.terminalUpVel);
+  	} else {
+  		this.applyWorldForces(force);
+  	}
   }
 
   p.stopUpDown = function(){
     this.velocity[1] = 0;
-  }
-
-  p.render = function(ctx){
-    if(this.sprite != null){
-  		this.sprite.render(ctx, this.location);
-  	} else {
-      app.draw.opaqueCircle(ctx,this.location[0],this.location[1],this.radius,this.col);
-    }
   }
 
   return PlayerEntity;
