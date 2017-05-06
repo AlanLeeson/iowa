@@ -14,11 +14,18 @@ app.Main = {
 	menu : undefined,
 	builder : undefined,
 	mousepos : undefined,
+	assets : undefined,
+	current_asset : 0,
 
 	//var used for finding dt
 	updatedTime : 0,
 
 	init : function(){
+
+		this.assets = [
+			new app.Sprite("assets/tile2.png", [0, 0], [200, 200], [50, 50], 0, [0]),
+			new app.Sprite("assets/tile3.png", [0, 0], [200, 200], [50, 50], 0, [0])
+		]
 
 		/*** Assign the canvas and the canvas context ***/
 		this.canvas = document.querySelector('canvas');
@@ -30,7 +37,7 @@ app.Main = {
 		var room = {
 			width: 2000,
 			height: 2000,
-			map: new app.Map(2000, 2000)
+			map: new app.Map(2000, 2000, 10)
 		};
 		room.map.generate(this.ctx);
 
@@ -71,9 +78,19 @@ app.Main = {
 		}, true);
 
 		var _builder = this.builder;
+		var _current_asset = this.current_asset;
+		var _assets = this.assets;
 		keyboardController.assignKeyAction(["1"], function (gameObject)
 		{
-			_builder.assignAsset(new app.Sprite("assets/tile2.png", [0, 0], [200, 200], [50, 50], 0, [0]));
+			_current_asset ++;
+			if (_current_asset >= _assets.length) { _current_asset = 0; }
+			_builder.assignAsset(_assets[_current_asset]);
+		}, true);
+		keyboardController.assignKeyAction(["2"], function (gameObject)
+		{
+			_current_asset --;
+			if (_current_asset < 0) { _current_asset = _assets.length - 1; }
+			_builder.assignAsset(_assets[_current_asset]);
 		}, true);
 
 		var mouseController = new app.mouseController();
@@ -84,7 +101,7 @@ app.Main = {
 			{
 				var entity_pos = _mouseController.canvasMousePosition();
 				var new_entity = new app.Entity(entity_pos[0], entity_pos[1], 3, "", 1, "stationary");
-				new_entity.setSprite(new app.Sprite("assets/tile2.png", [0, 0], [200, 200], [50, 50], 0, [0]));
+				new_entity.setSprite(_assets[_current_asset]);
 				_world.addEntity(new_entity);
 			}
 		});
@@ -153,7 +170,6 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
-		//this.builder.render(ctx);
 	},
 
 	//updates the objects in the game

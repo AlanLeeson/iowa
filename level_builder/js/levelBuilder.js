@@ -37,9 +37,10 @@ app.Builder = function () {
     };
 
     p.render = function (ctx) {
+        var snapped_position = vec2.fromValues(this.mouselocation[0], this.mouselocation[1]);
         if (this.sprite != null)
         {
-            this.sprite.render(ctx, this.mouselocation);
+            this.sprite.render(ctx, snapped_position);
         }
     };
 

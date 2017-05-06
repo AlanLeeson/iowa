@@ -4,11 +4,11 @@ var app = app || {};
 
 app.Map = function(){
 
-  var Map = function (width, height)
+  var Map = function (width, height, s_dimension)
   {
     this.width = width;
     this.height = height;
-
+    this.s_dimension = s_dimension;
     this.sprite = null;
   };
 
@@ -21,9 +21,9 @@ app.Map = function(){
 
 		var color = "grey";
 		ctx.save();
-		for (var x = 0, i = 0; i < rows; x+=10, i++) {
-			for (var y = 0, j=0; j < columns; y+=10, j++) {
-				app.draw.strokeRect(ctx, x, y, 10, 10, color);
+		for (var x = 0, i = 0; i < rows; x+=this.s_dimension, i++) {
+			for (var y = 0, j=0; j < columns; y+=this.s_dimension, j++) {
+				app.draw.strokeRect(ctx, x, y, this.s_dimension, this.s_dimension, color);
 			}
 		}
 		ctx.restore();
