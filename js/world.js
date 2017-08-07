@@ -77,17 +77,18 @@ app.World = function(){
 
     p.update = function(dt){
     	for(var i = this.entities.length - 1; i >= 0; i--)
-		{
-			var entity = this.entities[i];
+			{
+				var entity = this.entities[i];
 
-			entity.applyWorldForces(this.forces);
+				entity.applyWorldForces(this.forces);
 
-			if(entity.canRemove()){
-				this.entities.splice(i, 1);
-				continue;
+				if(entity.canRemove()){
+					this.entities.splice(i, 1);
+					continue;
+				}
+
+				entity.update(dt, this.entities);
 			}
-			entity.update(dt);
-		}
     };
 
     p.render = function(ctx){

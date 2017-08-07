@@ -43,6 +43,20 @@ app.Entity = function(){
 		return this.location;
 	}
 
+	p.getPolygon = function(){
+		var polygon = [];
+
+		for(var i = 0; i < this.vertices.length; i++)
+		{
+			polygon.push(
+				vec2.fromValues(
+					this.vertices[i][0] + this.location[0],
+					this.vertices[i][1] + this.location[1]));
+		}
+
+		return polygon;
+	}
+
 	p.setController = function(controller){
 		this.controller = controller;
 		this.controller.init();
@@ -61,7 +75,7 @@ app.Entity = function(){
 			return false;
 	};
 
-	p.update = function(dt){
+	p.update = function(dt, entities){
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
@@ -72,8 +86,22 @@ app.Entity = function(){
 		switch(this.type) {
 			case 'moveable' :
 
+				var old_location = vec2.clone(this.location);
+
 				updateLocation(this.velocity,this.acceleration,this.location);
 				this.acceleration = vec2.create();
+
+				for(var i = 0; i < entities.length; i++)
+				{
+					if(entities[i] !== this)
+					{
+						if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
+							
+						} else {
+
+						}
+					}
+				}
 
 				break;
 			case 'stationary' :
