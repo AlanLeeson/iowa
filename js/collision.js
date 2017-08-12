@@ -83,7 +83,8 @@ app.collision = {
       var end = i + 1 == polygon.length ? 0 : polygon[i + 1];
 
       var intersectionPoint = this.findLineIntersection(point, lowerBound, start, end);
-      if(intersectionPoint !== null)
+
+      if(intersectionPoint != null)
       {
         if(intersectionPoint == point)
         {
@@ -141,7 +142,7 @@ app.collision = {
     var x = line1point1[0] + (r * (line1point2[0] - line1point1[0]));
     var y = line1point1[0] + (r * (line1point2[1] - line1point1[1]));
 
-    return vec2.fromValues(x, y);
+    return isNaN(x) || isNaN(y) ? null : vec2.fromValues(x, y);
   },
 
   getYIntercept : function(linePoint1, linePoint2){
@@ -164,6 +165,6 @@ app.collision = {
         y = polygon[i][1];
     }
 
-    return vec2.fromValues(x + 10, y - 10);
+    return vec2.fromValues(Math.abs(x * 2) * -1, Math.abs(y * 2) * -1);
   }
 };
