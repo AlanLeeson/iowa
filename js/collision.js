@@ -80,7 +80,7 @@ app.collision = {
     for(var i = 0; i < polygon.length; i++)
     {
       var start = polygon[i];
-      var end = i + 1 == polygon.length ? 0 : polygon[i + 1];
+      var end =  polygon[(i + 1) % polygon.length];
 
       var intersectionPoint = this.findLineIntersection(point, lowerBound, start, end);
 
@@ -165,6 +165,6 @@ app.collision = {
         y = polygon[i][1];
     }
 
-    return vec2.fromValues(Math.abs(x * 2) * -1, Math.abs(y * 2) * -1);
+    return vec2.fromValues(x - 10, y - 10);
   }
 };
