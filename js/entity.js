@@ -96,19 +96,12 @@ app.Entity = function(){
 					if(entities[i] !== this)
 					{
 						if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
-
-							console.log("Polygon 1");
 							var polygon = this.getPolygon();
 							for(var j = 0; j < polygon.length; j++){
-								console.log(polygon[j]);
 							}
-							console.log("Polygon 2");
 							var polygon2 = entities[i].getPolygon();
 							for(var j = 0; j < polygon2.length; j++){
-								console.log(polygon2[j]);
 							}
-							console.log("done");
-
 						} else {
 
 						}
