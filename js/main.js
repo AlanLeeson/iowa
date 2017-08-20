@@ -6,6 +6,7 @@ app.Main = {
 
 	canvas : undefined,
 	ctx : undefined,
+	ui : undefined,
 
 	loadedForces : undefined,
 	world : undefined,
@@ -23,8 +24,11 @@ app.Main = {
 		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
 		this.canvas.style.width = window.innerWidth + 'px';
-    this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
+    	this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
 		this.ctx = this.canvas.getContext('2d');
+
+		/*** Initialize UI ***/
+		this.ui = new app.UI();
 
 		/*** Initialize the first room ***/
 		var room = {
@@ -62,6 +66,11 @@ app.Main = {
 			{
 				gameObject.setCurrentState("PLAY");
 			}
+		}, true);
+		var _ui = this.ui;
+		keyboardController.assignKeyAction([" "], function(gameObject)
+		{
+			_ui.startDialogue("starting the dialogue");
 		}, true);
 		this.gameObject.setController(keyboardController);
 
@@ -152,6 +161,7 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
+		app.draw.text(ctx,"This is text",50,50,40,"#000")
 	},
 
 	//updates the objects in the game

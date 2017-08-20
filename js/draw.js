@@ -35,7 +35,7 @@ app.draw = {
 	},
 
 	text: function(ctx,string,x,y,size,col){
-		ctx.font = 'bold ' + size + 'px georgia';
+		ctx.font = 'bold ' + size + 'px veranda';
 		ctx.fillStyle = col;
 		ctx.fillText(string,x,y);
 	},
