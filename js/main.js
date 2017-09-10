@@ -129,7 +129,15 @@ app.Main = {
 		})
 		player.setController(playerController);
 		this.world.addEntity(player);
-		//this.world.addEntity(new app.Entity(this.screenBounds.width/2,50,20,app.draw.randomRGBA(),1,"moveable"))
+
+		this.world.addEntity(new app.Entity(this.screenBounds.width/2,50,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(300,0),
+				vec2.fromValues(300,300),
+				vec2.fromValues(0,300)
+			],
+			app.draw.randomRGBA(),1,"moveable"))
 
 		/*** Initialize the camera ***/
 		var camera = new app.Camera(this.ctx);

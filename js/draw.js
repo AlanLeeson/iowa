@@ -78,6 +78,7 @@ app.draw = {
 			ctx.lineTo(x + vertex[0], y + vertex[1]);
 		}
 		ctx.lineTo(x + vertices[0][0], y + vertices[0][1]);
+		ctx.closePath();
 		ctx.stroke();
 		ctx.globalAlpha = 0.5;
 		ctx.fill();
