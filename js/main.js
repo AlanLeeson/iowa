@@ -8,6 +8,8 @@ app.Main = {
 	ctx : undefined,
 	ui : undefined,
 
+	fps : 0,
+
 	loadedForces : undefined,
 	world : undefined,
 	screenBounds : undefined,
@@ -17,6 +19,8 @@ app.Main = {
 	//var used for finding dt
 	updatedTime : 0,
 	ratio : undefined,
+
+	updating : false,
 
 	init : function(){
 
@@ -130,14 +134,21 @@ app.Main = {
 		player.setController(playerController);
 		this.world.addEntity(player);
 
-		this.world.addEntity(new app.Entity(this.screenBounds.width/2,50,
+		var box = new app.Entity(this.screenBounds.width/2,50,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(300,0),
 				vec2.fromValues(300,300),
 				vec2.fromValues(0,300)
 			],
-			app.draw.randomRGBA(),1,"moveable"))
+			app.draw.randomRGBA(),1,"moveable");
+
+		var _ui = this.ui;
+		box.setCollisionResolution(function(){
+			_ui.startTimedDialogue("Ouch!", 3000);
+		});
+
+		this.world.addEntity(box)
 
 		/*** Initialize the camera ***/
 		var camera = new app.Camera(this.ctx);
@@ -161,24 +172,31 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
-		app.draw.text(ctx,"This is text",50,50,40,"#000")
+		app.draw.text(ctx,"FPS: " + this.fps.toFixed(0), 960, 50, 40, "#000");
 	},
 
 	//updates the objects in the game
 	update : function(){
+		if(this.updating)
+			return;
+
+		this.updating = true;
+
 		//find deltaTime
 		var dt  = this.calculateDeltaTime();
 		this.gameObject.update(dt);
+
+		this.updating = false;
 	},
 
 	//calculate delta time to maintain a frame rate
 	calculateDeltaTime : function(){
-		var now, fps;
+		var now;
 		now = (+new Date);
-		fps = 1000/(now - this.updatedTime);
-		fps = this.clamp(fps,12,60);
+		this.fps = 1000/(now - this.updatedTime);
+		this.fps = this.clamp(this.fps,12,60);
 		this.updatedTime = now;
-		return 1/fps;
+		return 1/this.fps;
 	},
 
 	//helper function to stop values from exceeding bounds

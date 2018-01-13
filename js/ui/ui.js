@@ -14,6 +14,15 @@ app.UI = function(){
       this.dialogue_box.openDialogue(text);
   }
 
+  p.startTimedDialogue = function (text, time) {
+      this.dialogue_box.openDialogue(text);
+
+      var _ui = this;
+      setTimeout(function(){
+        _ui.dialogue_box.closeDialogue();
+      }, time);
+  }
+
   p.stopDialogue = function () {
       this.dialogue_box.closeDialogue();
   }
