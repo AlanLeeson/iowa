@@ -19,6 +19,8 @@ app.Entity = function(){
 		//array of vec2 points
 		this.vertices = vertices;
 
+		this.collisionResolution = null;
+
 		this.removeCondition = null;
 		this.listeners = [];
 	};
@@ -68,6 +70,12 @@ app.Entity = function(){
 		this.removeCondition = removeCondition;
 	};
 
+	p.setCollisionResolution = function(collisionResolution){
+		this.updateEntityEvent();
+
+		this.collisionResolution = collisionResolution;
+	};
+
 	p.canRemove = function(){
 		if (this.removeCondition !== null) {
 			return this.removeCondition();
@@ -95,14 +103,9 @@ app.Entity = function(){
 					if(entities[i] !== this)
 					{
 						if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
-							var polygon = this.getPolygon();
-							for(var j = 0; j < polygon.length; j++){
-							}
-							var polygon2 = entities[i].getPolygon();
-							for(var j = 0; j < polygon2.length; j++){
-							}
-						} else {
+							this.location = old_location;
 
+							entities[i].collisionResolution();
 						}
 					}
 				}
