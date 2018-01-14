@@ -4,15 +4,14 @@ var app = app || {};
 
 app.PlayerEntity = function(){
 
-  var PlayerEntity = function(x,y,radius,col,mass,type){
-    app.Entity.call(this,x,y,radius,col,mass,type);
+  var PlayerEntity = function(x,y,vertices,col,mass,type){
+    app.Entity.call(this,x,y,vertices,col,mass,type);
 
     this.applyCollisions = false;
-    this.health = 1000;
-	this.terminalRightVel = 1.3;
-	this.terminalLeftVel = -1.3;
-	this.terminalUpVel = -1.3;
-	this.terminalDownVel = 1.3;
+	this.terminalRightVel = 2.0;
+	this.terminalLeftVel = -2.0;
+	this.terminalUpVel = -2.0;
+	this.terminalDownVel = 2.0;
   };
 
   PlayerEntity.prototype = Object.create(app.Entity.prototype);

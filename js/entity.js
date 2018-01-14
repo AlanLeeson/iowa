@@ -87,7 +87,6 @@ app.Entity = function(){
 			case 'moveable' :
 
 				var old_location = vec2.clone(this.location);
-
 				updateLocation(this.velocity,this.acceleration,this.location);
 				this.acceleration = vec2.create();
 
