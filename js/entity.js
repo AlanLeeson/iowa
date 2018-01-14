@@ -104,8 +104,9 @@ app.Entity = function(){
 					{
 						if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
 							this.location = old_location;
-
-							entities[i].collisionResolution();
+							if (entities[i].collisionResolution !== null) {
+								entities[i].collisionResolution();
+							}
 						}
 					}
 				}

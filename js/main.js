@@ -96,13 +96,13 @@ app.Main = {
 
 		/*** Create a Player ***/
 		var player = new app.PlayerEntity(
-				room.width/2, room.height/2,
+				200, room.height/4,
 				[
 					vec2.fromValues(0,0),
-					vec2.fromValues(15, -30),
+					vec2.fromValues(15,10),
 					vec2.fromValues(30,0),
 					vec2.fromValues(30,30),
-					vec2.fromValues(15, 45),
+					vec2.fromValues(15,20),
 					vec2.fromValues(0,30)
 				],
 				app.draw.randomRGBA(), 1, 'moveable');
@@ -134,21 +134,44 @@ app.Main = {
 		player.setController(playerController);
 		this.world.addEntity(player);
 
-		var box = new app.Entity(this.screenBounds.width/2,50,
+		/*** Create world blocks ***/
+		var bw = 100;
+		var left_wall = new app.Entity(0,0,
 			[
 				vec2.fromValues(0,0),
-				vec2.fromValues(300,0),
-				vec2.fromValues(300,300),
-				vec2.fromValues(0,300)
+				vec2.fromValues(bw,0),
+				vec2.fromValues(bw,room.height),
+				vec2.fromValues(0,room.height)
 			],
-			app.draw.randomRGBA(),1,"moveable");
-
-		var _ui = this.ui;
-		box.setCollisionResolution(function(){
-			_ui.startTimedDialogue("Ouch!", 3000);
-		});
-
-		this.world.addEntity(box)
+			"#000",1,"static");
+		this.world.addEntity(left_wall)
+		var top_wall = new app.Entity(0,0,
+			[
+				vec2.fromValues(bw,0),
+				vec2.fromValues(room.width,0),
+				vec2.fromValues(room.width,bw),
+				vec2.fromValues(bw,bw)
+			],
+			"#000",1,"static");
+		this.world.addEntity(top_wall)
+		var right_wall = new app.Entity(0,0,
+			[
+				vec2.fromValues(room.width - bw,bw),
+				vec2.fromValues(room.width,bw),
+				vec2.fromValues(room.width,room.height),
+				vec2.fromValues(room.width - bw,room.height)
+			],
+			"#000",1,"static");
+		this.world.addEntity(right_wall)
+		var bottom_wall = new app.Entity(0,0,
+			[
+				vec2.fromValues(bw,room.height - bw),
+				vec2.fromValues(room.width - bw,room.height - bw),
+				vec2.fromValues(room.width - bw,room.height),
+				vec2.fromValues(bw,room.height)
+			],
+			"#000",1,"static");
+		this.world.addEntity(bottom_wall)
 
 		/*** Initialize the camera ***/
 		var camera = new app.Camera(this.ctx);
@@ -170,7 +193,7 @@ app.Main = {
 
 	//renders all objects in the game
 	render : function(ctx){
-		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
+		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#000");
 		this.gameObject.render(ctx);
 		app.draw.text(ctx,"FPS: " + this.fps.toFixed(0), 960, 50, 40, "#efefef");
 
