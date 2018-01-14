@@ -27,7 +27,7 @@ app.Map = function(){
 				for (var y = 0, j=0; j < columns; y+=88, j++) {
 					ctx.rect (x, y, 80, 80);
 				}
-				color = app.draw.randomRGBA();
+				color = app.draw.randomGray(100);
 				ctx.fillStyle = color;
 				ctx.fill();
 				ctx.closePath();

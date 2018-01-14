@@ -94,5 +94,14 @@ app.draw = {
 		var green = parseInt(Math.random() * difference + low);
 		var blue = parseInt(Math.random() * difference + low);
 		return 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')';
+	},
+
+	randomGray : function(high = 255, low = 0, alpha = 1) {
+		high = high > 255 || high < 0 ? 255 : high;
+		low = low < 0 || low > 255 ? 0 : low;
+		alpha = alpha < 0 || alpha > 1 ? 1 : alpha;
+		var difference = high - low;
+		var gray_color = parseInt(Math.random() * difference + low);
+		return 'rgba(' +  gray_color + ',' + gray_color + ',' + gray_color + ',' + alpha + ')';
 	}
 };

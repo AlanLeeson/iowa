@@ -172,7 +172,7 @@ app.Main = {
 	render : function(ctx){
 		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
 		this.gameObject.render(ctx);
-		app.draw.text(ctx,"FPS: " + this.fps.toFixed(0), 960, 50, 40, "#000");
+		app.draw.text(ctx,"FPS: " + this.fps.toFixed(0), 960, 50, 40, "#efefef");
 	},
 
 	//updates the objects in the game
