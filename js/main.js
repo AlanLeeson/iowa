@@ -72,10 +72,6 @@ app.Main = {
 			}
 		}, true);
 		var _ui = this.ui;
-		keyboardController.assignKeyAction([" "], function(gameObject)
-		{
-			_ui.startDialogue("starting the dialogue");
-		}, true);
 		this.gameObject.setController(keyboardController);
 
 		/*** Initialize menu ***/
@@ -96,7 +92,7 @@ app.Main = {
 
 		/*** Create a Player ***/
 		var player = new app.PlayerEntity(
-				200, room.height/4,
+				200, 200,
 				[
 					vec2.fromValues(0,0),
 					vec2.fromValues(15,10),
@@ -105,7 +101,7 @@ app.Main = {
 					vec2.fromValues(15,20),
 					vec2.fromValues(0,30)
 				],
-				app.draw.randomRGBA(), 1, 'moveable');
+				app.draw.randomRGBA(100,0), 1, 'moveable');
 		var playerController = new app.KeyboardController();
 		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
@@ -172,6 +168,67 @@ app.Main = {
 			],
 			"#000",1,"static");
 		this.world.addEntity(bottom_wall)
+
+		var middle_structure = new app.Entity(100,300,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(room.width - 300,0),
+				vec2.fromValues(room.width - 300,500),
+				vec2.fromValues(0,500)
+			],
+			"#000",1,"static");
+		this.world.addEntity(middle_structure)
+
+		var first_block = new app.Entity(400, 200,
+			[
+				vec2.fromValues(-50,-50),
+				vec2.fromValues(50,-50),
+				vec2.fromValues(50,50),
+				vec2.fromValues(-50,50)
+			],
+			"#3dd",1,"static");
+		first_block.setCollisionResolution(function(){
+			_ui.startTimedDialogue("<strong>Hey!</strong> You think you can just <i>walk into me</i> huh? If I wasn't a <strong>block</strong> you'd be getting a piece of my mind!", 6000);
+		});
+		this.world.addEntity(first_block);
+		
+		var npc = new app.Entity(600, 260,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(15,0),
+				vec2.fromValues(15,15),
+				vec2.fromValues(0,15)
+			],
+			"#300",1,"moveable");
+		npc.setCollisionResolution(function(entity){
+			this.applyForce(entity.velocity);
+		});
+		this.world.addEntity(npc);
+		
+		var npc2 = new app.Entity(800, 260,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(15,0),
+				vec2.fromValues(15,15),
+				vec2.fromValues(0,15)
+			],
+			"#030",1,"moveable");
+		npc2.setCollisionResolution(function(entity){
+			this.applyForce(entity.velocity);
+		});
+		this.world.addEntity(npc2);
+		
+		var stationary = new app.Entity(600, 160,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(15,10),
+				vec2.fromValues(30,0),
+				vec2.fromValues(30,30),
+				vec2.fromValues(15,20),
+				vec2.fromValues(0,30)
+			],
+			"#300",1,"moveable");
+		this.world.addEntity(stationary);
 
 		/*** Initialize the camera ***/
 		var camera = new app.Camera(this.ctx);

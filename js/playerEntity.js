@@ -8,10 +8,10 @@ app.PlayerEntity = function(){
     app.Entity.call(this,x,y,vertices,col,mass,type);
 
     this.applyCollisions = false;
-	this.terminalRightVel = 2.0;
-	this.terminalLeftVel = -2.0;
-	this.terminalUpVel = -2.0;
-	this.terminalDownVel = 2.0;
+	this.terminalRightVel = 2.5;
+	this.terminalLeftVel = -2.5;
+	this.terminalUpVel = -2.5;
+	this.terminalDownVel = 2.5;
   };
 
   PlayerEntity.prototype = Object.create(app.Entity.prototype);
