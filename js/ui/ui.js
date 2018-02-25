@@ -15,16 +15,16 @@ app.UI = function(){
   p.startDialogue = function (text) {
       this.dialogue_box.openDialogue(text);
       this.last_time_dialogue = null;
-  }
+  };
 
   p.startTimedDialogue = function (text, time) {
       this.dialogue_box.openDialogue(text);
       this.last_time_dialogue = (+new Date) + time;
-  }
+  };
 
   p.stopDialogue = function () {
       this.dialogue_box.closeDialogue();
-  }
+  };
 
   p.updateDialogue = function() {
       var now = (+new Date);
@@ -34,7 +34,7 @@ app.UI = function(){
         this.stopDialogue();
         this.last_time_dialogue = null;
       }
-  }
+  };
 
   return UI;
 }();
