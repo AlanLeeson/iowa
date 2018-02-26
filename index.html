@@ -29,26 +29,30 @@
 			margin: 0 auto;
 			left: 0;
 			right: 0;
-			background-color: #eaeaea;
+			background-color: #fefefe;
 			z-index: 100;
 			border-radius: 5px;
 			font-size: 3em;
+			color: #232323;
 			overflow: hidden;
 			text-transform: uppercase;
-			font-weight: 100;
 		}
 		.closed {
 			width: 0;
 			height: 0;
-			padding: 0;
+
+			-webkit-transition: height width 200ms ease-in-out, width 200ms ease-in-out;
+		    -moz-transition: height 200ms ease-in-out, width 200ms ease-in-out;
+		    -o-transition: height 200ms ease-in-out, width 200ms ease-in-out;
+		    transition: height 200ms ease-in-out, width 200ms ease-in-out;
 		}
 		.opened {
 			visibility: visible;
-			width: 80%;
 			height: 20%;
-			font-size: 3em;
+			width: 80%;
 			padding: 1rem;
 			border: 3px solid #333;
+			
 			-webkit-transition: height 200ms ease-in-out;
 		    -moz-transition: height 200ms ease-in-out;
 		    -o-transition: height 200ms ease-in-out;

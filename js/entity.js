@@ -23,6 +23,7 @@ app.Entity = function(){
 
 		this.removeCondition = null;
 		this.listeners = [];
+		this.friction = vec2.fromValues(5,5);
 	};
 
 	var p = Entity.prototype;
@@ -104,8 +105,9 @@ app.Entity = function(){
 					{
 						if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
 							this.location = old_location;
-
-							entities[i].collisionResolution();
+							if (entities[i].collisionResolution !== null) {
+								entities[i].collisionResolution(this);
+							}
 						}
 					}
 				}

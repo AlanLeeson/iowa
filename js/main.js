@@ -72,10 +72,6 @@ app.Main = {
 			}
 		}, true);
 		var _ui = this.ui;
-		keyboardController.assignKeyAction([" "], function(gameObject)
-		{
-			_ui.startDialogue("starting the dialogue");
-		}, true);
 		this.gameObject.setController(keyboardController);
 
 		/*** Initialize menu ***/
@@ -96,16 +92,16 @@ app.Main = {
 
 		/*** Create a Player ***/
 		var player = new app.PlayerEntity(
-				room.width/2, room.height/2,
+				200, 200,
 				[
 					vec2.fromValues(0,0),
-					vec2.fromValues(15, -30),
+					vec2.fromValues(15,10),
 					vec2.fromValues(30,0),
 					vec2.fromValues(30,30),
-					vec2.fromValues(15, 45),
+					vec2.fromValues(15,20),
 					vec2.fromValues(0,30)
 				],
-				app.draw.randomRGBA(), 1, 'moveable');
+				app.draw.randomRGBA(100,0), 1, 'moveable');
 		var playerController = new app.KeyboardController();
 		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
@@ -134,21 +130,105 @@ app.Main = {
 		player.setController(playerController);
 		this.world.addEntity(player);
 
-		var box = new app.Entity(this.screenBounds.width/2,50,
+		/*** Create world blocks ***/
+		var bw = 100;
+		var left_wall = new app.Entity(0,0,
 			[
 				vec2.fromValues(0,0),
-				vec2.fromValues(300,0),
-				vec2.fromValues(300,300),
-				vec2.fromValues(0,300)
+				vec2.fromValues(bw,0),
+				vec2.fromValues(bw,room.height),
+				vec2.fromValues(0,room.height)
 			],
-			app.draw.randomRGBA(),1,"moveable");
+			"#000",1,"static");
+		this.world.addEntity(left_wall)
+		var top_wall = new app.Entity(0,0,
+			[
+				vec2.fromValues(bw,0),
+				vec2.fromValues(room.width,0),
+				vec2.fromValues(room.width,bw),
+				vec2.fromValues(bw,bw)
+			],
+			"#000",1,"static");
+		this.world.addEntity(top_wall)
+		var right_wall = new app.Entity(0,0,
+			[
+				vec2.fromValues(room.width - bw,bw),
+				vec2.fromValues(room.width,bw),
+				vec2.fromValues(room.width,room.height),
+				vec2.fromValues(room.width - bw,room.height)
+			],
+			"#000",1,"static");
+		this.world.addEntity(right_wall)
+		var bottom_wall = new app.Entity(0,0,
+			[
+				vec2.fromValues(bw,room.height - bw),
+				vec2.fromValues(room.width - bw,room.height - bw),
+				vec2.fromValues(room.width - bw,room.height),
+				vec2.fromValues(bw,room.height)
+			],
+			"#000",1,"static");
+		this.world.addEntity(bottom_wall)
 
-		var _ui = this.ui;
-		box.setCollisionResolution(function(){
-			_ui.startTimedDialogue("Ouch!", 3000);
+		var middle_structure = new app.Entity(100,300,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(room.width - 300,0),
+				vec2.fromValues(room.width - 300,500),
+				vec2.fromValues(0,500)
+			],
+			"#000",1,"static");
+		this.world.addEntity(middle_structure)
+
+		var first_block = new app.Entity(400, 200,
+			[
+				vec2.fromValues(-50,-50),
+				vec2.fromValues(50,-50),
+				vec2.fromValues(50,50),
+				vec2.fromValues(-50,50)
+			],
+			"#3dd",1,"static");
+		first_block.setCollisionResolution(function(){
+			_ui.startTimedDialogue("<strong>Hey!</strong> You think you can just <i>walk into me</i> huh? If I wasn't a <strong>block</strong> you'd be getting a piece of my mind!", 6000);
 		});
-
-		this.world.addEntity(box)
+		this.world.addEntity(first_block);
+		
+		var npc = new app.Entity(600, 260,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(15,0),
+				vec2.fromValues(15,15),
+				vec2.fromValues(0,15)
+			],
+			"#300",1,"moveable");
+		npc.setCollisionResolution(function(entity){
+			this.applyForce(entity.velocity);
+		});
+		this.world.addEntity(npc);
+		
+		var npc2 = new app.Entity(800, 260,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(15,0),
+				vec2.fromValues(15,15),
+				vec2.fromValues(0,15)
+			],
+			"#030",1,"moveable");
+		npc2.setCollisionResolution(function(entity){
+			this.applyForce(entity.velocity);
+		});
+		this.world.addEntity(npc2);
+		
+		var stationary = new app.Entity(600, 160,
+			[
+				vec2.fromValues(0,0),
+				vec2.fromValues(15,10),
+				vec2.fromValues(30,0),
+				vec2.fromValues(30,30),
+				vec2.fromValues(15,20),
+				vec2.fromValues(0,30)
+			],
+			"#300",1,"moveable");
+		this.world.addEntity(stationary);
 
 		/*** Initialize the camera ***/
 		var camera = new app.Camera(this.ctx);
@@ -170,7 +250,7 @@ app.Main = {
 
 	//renders all objects in the game
 	render : function(ctx){
-		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#eee");
+		app.draw.rect(ctx,0,0,this.canvas.width,this.canvas.height,"#000");
 		this.gameObject.render(ctx);
 		app.draw.text(ctx,"FPS: " + this.fps.toFixed(0), 960, 50, 40, "#efefef");
 
