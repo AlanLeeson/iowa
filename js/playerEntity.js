@@ -72,20 +72,65 @@ app.PlayerEntity = function(){
     this.sprint = false;
   }
 
+  p.startSneak = function(){
+    this.sprint = false;
+    this.sneak = true;
+  }
+
+  p.stopSneak = function(){
+    this.sneak = false;
+  }
+
   p.getTerminalRightVel = function(){
-    return this.sprint ? 2 * this.terminalRightVel : this.terminalRightVel;
+    var termVal = this.terminalRightVel;
+    if(this.sprint)
+    {
+      termVal = termVal * 2;
+    }
+    if(this.sneak)
+    {
+      termVal = termVal / 2;
+    }
+    return termVal;
   }
 
   p.getTerminalLeftVel = function(){
-    return this.sprint ? 2 * this.terminalLeftVel : this.terminalLeftVel;
+    var termVal = this.terminalLeftVel;
+    if(this.sprint)
+    {
+      termVal = termVal * 2;
+    }
+    if(this.sneak)
+    {
+      termVal = termVal / 2;
+    }
+    return termVal;
   }
 
   p.getTerminalDownVel = function(){
-    return this.sprint ? 2 * this.terminalDownVel : this.terminalDownVel;
+    var termVal = this.terminalDownVel;
+    if(this.sprint)
+    {
+      termVal = termVal * 2;
+    }
+    if(this.sneak)
+    {
+      termVal = termVal / 2;
+    }
+    return termVal;
   }
 
   p.getTerminalUpVel = function(){
-    return this.sprint ? 2 * this.terminalUpVel : this.terminalUpVel;
+    var termVal = this.terminalUpVel;
+    if(this.sprint)
+    {
+      termVal = termVal * 2;
+    }
+    if(this.sneak)
+    {
+      termVal = termVal / 2;
+    }
+    return termVal;
   }
 
   return PlayerEntity;
