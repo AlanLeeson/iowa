@@ -130,11 +130,19 @@ app.Main = {
 		playerController.assignKeyAction([ "l", "L"], function (entity)
 		{
 			entity.startSprint();
-		})
+		});
 		playerController.assignKeyUpAction([ "l", "L"], function (entity)
 		{
 			entity.stopSprint();
-		})
+		});
+		playerController.assignKeyAction([ "k", "K"], function (entity)
+		{
+			entity.startSneak();
+		});
+		playerController.assignKeyUpAction([ "k", "K"], function (entity)
+		{
+			entity.stopSneak();
+		});
 		player.setController(playerController);
 		this.world.addEntity(player);
 
