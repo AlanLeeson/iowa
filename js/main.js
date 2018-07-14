@@ -127,11 +127,11 @@ app.Main = {
 		{
 			entity.stopUpDown();
 		});
-		playerController.assignKeyAction([ "l"], function (entity)
+		playerController.assignKeyAction([ "l", "L"], function (entity)
 		{
 			entity.startSprint();
 		})
-		playerController.assignKeyUpAction([ "l"], function (entity)
+		playerController.assignKeyUpAction([ "l", "L"], function (entity)
 		{
 			entity.stopSprint();
 		})
