@@ -126,6 +126,14 @@ app.Main = {
 		playerController.assignKeyUpAction([ "w", "ArrowUp", "s", "ArrowDown"], function (entity)
 		{
 			entity.stopUpDown();
+		});
+		playerController.assignKeyAction([ "l", "L"], function (entity)
+		{
+			entity.startSprint();
+		})
+		playerController.assignKeyUpAction([ "l", "L"], function (entity)
+		{
+			entity.stopSprint();
 		})
 		player.setController(playerController);
 		this.world.addEntity(player);
@@ -191,7 +199,7 @@ app.Main = {
 			_ui.startTimedDialogue("<strong>Hey!</strong> You think you can just <i>walk into me</i> huh? If I wasn't a <strong>block</strong> you'd be getting a piece of my mind!", 6000);
 		});
 		this.world.addEntity(first_block);
-		
+
 		var npc = new app.Entity(600, 260,
 			[
 				vec2.fromValues(0,0),
@@ -204,7 +212,7 @@ app.Main = {
 			this.applyForce(entity.velocity);
 		});
 		this.world.addEntity(npc);
-		
+
 		var npc2 = new app.Entity(800, 260,
 			[
 				vec2.fromValues(0,0),
@@ -217,7 +225,7 @@ app.Main = {
 			this.applyForce(entity.velocity);
 		});
 		this.world.addEntity(npc2);
-		
+
 		var stationary = new app.Entity(600, 160,
 			[
 				vec2.fromValues(0,0),
