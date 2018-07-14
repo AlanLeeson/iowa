@@ -14,6 +14,7 @@ app.PlayerEntity = function(){
 	  this.terminalDownVel = 2.5;
 
     this.sprint = false;
+    this.sneak = false;
   };
 
   PlayerEntity.prototype = Object.create(app.Entity.prototype);
