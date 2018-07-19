@@ -14,7 +14,7 @@ function updateLocation(velocity,acceleration,location){
 	//add velocity to location
 	vec2.add(location,location,velocity);
 	//Zero the acceleration
-	acceleration = vec2.create();	
+	acceleration = vec2.create();
 }
 
 function seek(location,targetLocation,velocity,maxSpeed,maxForce){
@@ -81,6 +81,11 @@ function map(value,istart,istop,ostart,ostop){
 	return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
 }
 
+function distance(vector1, vector2){
+	return Math.sqrt(Math.pow(vector2[0]-vector1[0], 2) + Math.pow(vector2[1]-vector1[1], 2));
+}
+
+
 function limit(vector,max) {
     if (magSquared(vec2.fromValues(vector[0],vector[1])) > max*max) {
     	vec2.normalize(vector,vector);
@@ -91,4 +96,3 @@ function limit(vector,max) {
 function magSquared(vector){
 	return (vector[0] * vector[0] + vector[1] * vector[1]);
 }
-    

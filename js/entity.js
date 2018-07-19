@@ -20,6 +20,7 @@ app.Entity = function(){
 		this.vertices = vertices;
 
 		this.collisionResolution = null;
+		this.customLogic = null;
 
 		this.removeCondition = null;
 		this.listeners = [];
@@ -60,6 +61,21 @@ app.Entity = function(){
 		return polygon;
 	}
 
+	p.getCenter = function(){
+		var x_sum = 0;
+		var y_sum = 0;
+
+		var polygon = this.getPolygon();
+		for(var i = 0; i < this.vertices.length; i++)
+		{
+			x_sum += polygon[i][0];
+			y_sum += polygon[i][1];
+		}
+
+		return vec2.fromValues(x_sum / this.vertices.length,y_sum / this.vertices.length);
+	}
+
+
 	p.setController = function(controller){
 		this.controller = controller;
 		this.controller.init();
@@ -77,6 +93,10 @@ app.Entity = function(){
 		this.collisionResolution = collisionResolution;
 	};
 
+	p.setCustomLogic = function(customLogic){
+		this.customLogic = customLogic;
+	}
+
 	p.canRemove = function(){
 		if (this.removeCondition !== null) {
 			return this.removeCondition();
@@ -90,6 +110,10 @@ app.Entity = function(){
 		}
 		if(this.sprite !== null){
 			this.sprite.update(dt);
+		}
+
+		if (this.customLogic !== null) {
+			this.customLogic(this);
 		}
 
 		switch(this.type) {
