@@ -206,6 +206,16 @@ app.Main = {
 		first_block.setCollisionResolution(function(){
 			_ui.startTimedDialogue("<strong>Hey!</strong> You think you can just <i>walk into me</i> huh? If I wasn't a <strong>block</strong> you'd be getting a piece of my mind!", 6000);
 		});
+
+		first_block.setCustomLogic(function(entity){
+			if(player.sprint)
+			{
+				if(distance(entity.getCenter(), player.getCenter()) < 100){
+					_ui.startTimedDialogue("<strong>Hey!</strong> Stop running!", 6000);
+					entity.setCustomLogic(null);
+			 }
+			}
+		})
 		this.world.addEntity(first_block);
 
 		var npc = new app.Entity(600, 260,
