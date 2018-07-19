@@ -215,7 +215,7 @@ app.Main = {
 					entity.setCustomLogic(null);
 			 }
 			}
-		})
+		});
 		this.world.addEntity(first_block);
 
 		var npc = new app.Entity(600, 260,
