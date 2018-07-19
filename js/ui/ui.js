@@ -13,6 +13,7 @@ app.UI = function(){
   var p = UI.prototype;
 
   p.startDialogue = function (text) {
+      this.stopDialogue();
       this.dialogue_box.openDialogue(text);
       this.last_time_dialogue = null;
   };
