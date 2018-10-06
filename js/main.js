@@ -27,8 +27,10 @@ app.Main = {
 		/*** Assign the canvas and the canvas context ***/
 		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
-		this.canvas.style.width = window.innerWidth + 'px';
-    	this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
+
+		this.canvas.style.width = this.clamp(window.innerWidth, 0, 1400) + 'px';
+    	//this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
+		this.canvas.height = this.canvas.width * this.canvas.clientHeight / this.canvas.clientWidth;
 		this.ctx = this.canvas.getContext('2d');
 
 		/*** Initialize UI ***/
@@ -78,8 +80,8 @@ app.Main = {
 		this.menu = new app.Menu("main", vec2.fromValues(this.screenBounds.width / 2, this.screenBounds.height / 2));
 		this.menu.addText({
 			"text" : "Press \"m\" to Play",
-			"xPos" : (this.screenBounds.width * 3 / 10),
-			"yPos" : (this.screenBounds.height * 5 / 6),
+			"xPos" : (this.screenBounds.width / 3),
+			"yPos" : (this.screenBounds.height / 2),
 			"size" : "50",
 			"col" : app.draw.randomRGBA(100)
 		});
@@ -185,21 +187,23 @@ app.Main = {
 			"#000",1,"static");
 		this.world.addEntity(bottom_wall)
 
-		var middle_structure = new app.Entity(100,300,
+		var middle_structure = new app.Entity(100,500,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(room.width - 300,0),
-				vec2.fromValues(room.width - 300,500),
-				vec2.fromValues(0,500)
+				vec2.fromValues(room.width - 300,300),
+				vec2.fromValues(0,300)
 			],
 			"#000",1,"static");
 		this.world.addEntity(middle_structure)
 
-		var first_block = new app.Entity(400, 200,
+		var first_block = new app.Entity(400, 300,
 			[
 				vec2.fromValues(-50,-50),
+				vec2.fromValues(0,-75),
 				vec2.fromValues(50,-50),
 				vec2.fromValues(50,50),
+				vec2.fromValues(0,75),
 				vec2.fromValues(-50,50)
 			],
 			"#3dd",1,"static");
@@ -225,7 +229,7 @@ app.Main = {
 				vec2.fromValues(15,15),
 				vec2.fromValues(0,15)
 			],
-			"#300",1,"moveable");
+			"#300",1,"moveable", 0.9);
 		npc.setCollisionResolution(function(entity){
 			this.applyForce(entity.velocity);
 		});
@@ -238,7 +242,7 @@ app.Main = {
 				vec2.fromValues(15,15),
 				vec2.fromValues(0,15)
 			],
-			"#030",1,"moveable");
+			"#030",1,"moveable", 0.75);
 		npc2.setCollisionResolution(function(entity){
 			this.applyForce(entity.velocity);
 		});

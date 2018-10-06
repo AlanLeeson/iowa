@@ -4,7 +4,7 @@ var app = app || {};
 
 app.Entity = function(){
 
-	var Entity = function(x,y,vertices,col,mass,type){
+	var Entity = function(x,y,vertices,col,mass,type,friction = 1){
 		this.type = type;
 		this.col = col;
 
@@ -24,7 +24,7 @@ app.Entity = function(){
 
 		this.removeCondition = null;
 		this.listeners = [];
-		this.friction = vec2.fromValues(5,5);
+		this.friction = friction;
 	};
 
 	var p = Entity.prototype;
@@ -118,9 +118,8 @@ app.Entity = function(){
 
 		switch(this.type) {
 			case 'moveable' :
-
 				var old_location = vec2.clone(this.location);
-				updateLocation(this.velocity,this.acceleration,this.location);
+				updateLocation(this.velocity,this.acceleration,this.location,this.friction);
 				this.acceleration = vec2.create();
 
 				for(var i = 0; i < entities.length; i++)

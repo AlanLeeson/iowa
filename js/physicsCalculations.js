@@ -2,14 +2,17 @@
 
 var app = app || {};
 
-function applyForce(force,acceleration){
+function applyForce(force, acceleration, mass = 1){
 	//divide the force by the mass
-	force = vec2.fromValues(force[0]/2,force[1]/2);
+	force = vec2.fromValues(force[0]/mass,force[1]/mass);
+
 	//add the force to acceleration
 	vec2.add(acceleration, acceleration, force);
 }
 
-function updateLocation(velocity,acceleration,location){
+function updateLocation(velocity, acceleration, location, friction){
+	vec2.multiplyByScalar(velocity,friction);
+
 	vec2.add(velocity,velocity,acceleration);
 	//add velocity to location
 	vec2.add(location,location,velocity);
