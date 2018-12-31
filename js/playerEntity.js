@@ -1,8 +1,8 @@
 "use strict";
 
-class PlayerEntity extends Entity{
-	constructor(posX, posY, vertices, colour, mass, type) {
-		super(posX, posY, vertices, colour, mass, "moveable");
+class PlayerEntity extends MoveableEntity{
+	constructor(posX, posY, vertices, colour, mass = 1, friction = 1) {
+		super(posX, posY, vertices, colour, mass, friction);
 		this.applyCollisions = false;
 	  	this.terminalRightVel = 3;
 	  	this.terminalLeftVel = -3;

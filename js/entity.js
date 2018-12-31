@@ -1,17 +1,13 @@
 "use strict";
 
 class Entity {
-	constructor(posX, posY, vertices, colour, mass, type, friction = 1) {
-		this.type = type;
+	constructor(posX, posY, vertices, colour) {
 		this.colour = colour;
 
 		this.location = vec2.fromValues(posX,posY);
-		this.velocity = vec2.create();
-		this.acceleration = vec2.create();
-		this.movementSpeed = mass;
-		this.maxVelocity = vec2.fromValues(5,5);
 		this.sprite = null;
 		this.controller = null;
+		this.acceleration = vec2.create();
 
 		//array of vec2 points
 		this.vertices = vertices;
@@ -21,7 +17,6 @@ class Entity {
 
 		this.removeCondition = null;
 		this.listeners = [];
-		this.friction = friction;
 	}
 	
 	updateEntityEvent() {
@@ -109,29 +104,6 @@ class Entity {
 			this.customLogic(this);
 		}
 
-		switch(this.type) {
-			case 'moveable' :
-				var old_location = vec2.clone(this.location);
-				updateLocation(this.velocity,this.acceleration,this.location,this.friction);
-				this.acceleration = vec2.create();
-
-				for(var i = 0; i < entities.length; i++)
-				{
-					if(entities[i] !== this)
-					{
-						if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
-							this.location = old_location;
-							if (entities[i].collisionResolution !== null) {
-								entities[i].collisionResolution(this);
-							}
-						}
-					}
-				}
-
-				break;
-			case 'stationary' :
-				break;
-		}
 	};
 	
 	render(ctx) {
@@ -148,5 +120,34 @@ class Entity {
 	applyForce(force) {
 		applyForce(force, this.acceleration);
 	};
+}
 
-} 
+class MoveableEntity extends Entity {
+	constructor(posX, posY, vertices, colour, mass = 1, friction = 1) {
+		super(posX, posY, vertices, colour);
+		this.velocity = vec2.create();
+		this.movementSpeed = mass;
+		this.maxVelocity = vec2.fromValues(5,5);
+		this.friction = friction;
+	}
+	
+	update(dt, entities) {
+		super.update(dt, entities);
+		var old_location = vec2.clone(this.location);
+		updateLocation(this.velocity,this.acceleration,this.location,this.friction);
+		this.acceleration = vec2.create();
+
+		for(var i = 0; i < entities.length; i++)
+		{
+			if(entities[i] !== this)
+			{
+				if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
+					this.location = old_location;
+					if (entities[i].collisionResolution !== null) {
+						entities[i].collisionResolution(this);
+					}
+				}
+			}
+		}
+	}
+}
