@@ -1,45 +1,42 @@
 "use strict"
 
-var app = app || {};
+class GameObject {
 
-app.GameObject = function () {
-
-	var GameObject = function() {
+	constructor() {
 		this.world = new app.World({});
 		this.states = {"PLAY" : 0, "PAUSE" : 1, "MENU" : 2};
-		this.menu = new app.Menu();
+		this.menu = new Menu();
 
 		this.controller = null;
 	};
 
-	var p = GameObject.prototype;
 
-	p.getCurrentState = function() {
+	getCurrentState() {
 		return this.world.currentState;
 	};
 
-	p.setCurrentState = function(state) {
+	setCurrentState(state) {
 		this.world.currentState = this.states[state] != null ? this.states[state] : this.world.currentState;
 	};
 
-	p.getController = function() {
+	getController() {
 		return this.controller;
 	}
 
-	p.setController = function(controller) {
+	setController(controller) {
 		this.controller = controller;
 		this.controller.init();
 	}
 
-	p.setWorld = function(world) {
+	setWorld(world) {
 		this.world = world;
 	};
 
-	p.setMenu = function(menu) {
+	setMenu(menu) {
 		this.menu = menu;
 	};
 
-	p.update = function(dt) {
+	update(dt) {
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
@@ -53,7 +50,7 @@ app.GameObject = function () {
 		}
 	};
 
-	p.render = function(ctx) {
+	render(ctx) {
 		if(this.states.PLAY === this.world.currentState){
 			this.world.render(ctx);
 		}
@@ -65,8 +62,5 @@ app.GameObject = function () {
 			this.menu.render(ctx);
 		}
 	};
-
-
-	return GameObject;
-
-}();
+	
+}

@@ -1,10 +1,8 @@
 "use strict"
 
-var app = app || {};
+class Sprite {
 
-app.Sprite = function(){
-
-	function Sprite(url, pos, frame_size, size, speed, frames, dir, once) {
+	constructor(url, pos, frame_size, size, speed, frames, dir, once) {
 		this.pos = pos;
 		this.frame_size = frame_size;
 		this.size = size;
@@ -15,18 +13,16 @@ app.Sprite = function(){
 		this.dir = dir || 'horizontal';
 		this.once = once;
 	};
-
-	var p = Sprite.prototype;
-
-	p.update = function(dt) {
+	
+	update(dt) {
     	this._index += this.speed*dt;
 	};
 
-	p.setLocation = function(location) {
+	setLocation(location) {
 		this.location = location;
 	};
 
-	p.render = function(ctx, location) {
+	render(ctx, location) {
 		if(!resources.get(this.url)) {return; }
 		var frame;
 
@@ -52,7 +48,4 @@ app.Sprite = function(){
 		}
 		ctx.drawImage(resources.get(this.url), x, y, this.frame_size[0], this.frame_size[1], center[0], center[1], this.size[0], this.size[1]);
 	}
-
-	return Sprite;
-
-}();
+};

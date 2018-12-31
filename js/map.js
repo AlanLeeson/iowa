@@ -2,19 +2,16 @@
 
 var app = app || {};
 
-app.Map = function(){
+class Map {
 
-  var Map = function (width, height)
-  {
+  constructor (width, height) {
     this.width = width;
     this.height = height;
 
     this.sprite = null;
   };
-
-  var p = Map.prototype;
-
-  p.generate = function(ctx)
+  
+  generate(ctx)
   {
 		var rows = ~~(this.width/44) + 1;
 		var columns = ~~(this.height/44) + 1;
@@ -39,10 +36,8 @@ app.Map = function(){
 		this.sprite.src = ctx.canvas.toDataURL("image/png");
   };
 
-  p.render = function(ctx){
+  render(ctx){
 			ctx.drawImage(this.sprite, 0, 0, this.width, this.height);
 	};
 
-  return Map;
-
-}();
+};

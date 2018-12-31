@@ -1,10 +1,8 @@
 "use strict";
 
-var app = app || {};
+class KeyboardController {
 
-app.KeyboardController = function(){
-
-	var KeyboardController = function(){
+	constructor(){
       this.keyActions = [];
       this.keyUpActions = [];
 			this.singlePress = [];
@@ -15,9 +13,7 @@ app.KeyboardController = function(){
 			this.KEYHYBERNATE = 3;
     };
 
-    var p = KeyboardController.prototype;
-
-    p.init = function(){
+    init(){
       var _this = this;
 
       window.addEventListener("keypress", function(e){
@@ -31,8 +27,7 @@ app.KeyboardController = function(){
       });
     };
 
-	p.assignKeyAction = function (keys, action, singlePress = false)
-	{
+	assignKeyAction(keys, action, singlePress = false) {
 		for(var i = 0; i < keys.length; i++)
 		{
 			this.keyActions[keys[i]] = action;
@@ -41,7 +36,7 @@ app.KeyboardController = function(){
 		}
 	};
 
-	p.assignKeyUpAction = function (keys, upAction) {
+	assignKeyUpAction(keys, upAction) {
 
 		for(var i = 0; i < keys.length; i++)
 		{
@@ -49,7 +44,7 @@ app.KeyboardController = function(){
 		}
 	};
 
-    p.update = function(object){
+    update(object){
 			for(var key in this.keyActions)
 			{
 				if(this.keydown[key] == this.KEYDOWN)
@@ -67,7 +62,4 @@ app.KeyboardController = function(){
 				}
 			}
     };
-
-    return KeyboardController;
-
-}();
+};

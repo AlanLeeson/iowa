@@ -1,7 +1,5 @@
 "use strict"
 
-var app = app || {};
-
 (function() {
 
     var resourceCache = {};
