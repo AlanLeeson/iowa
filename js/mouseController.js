@@ -1,10 +1,8 @@
 "use strict";
 
-var app = app || {};
+class mouseController {
 
-app.mouseController =  function () {
-
-    var mouseController = function(){
+    constructor(){
         this.mouseDownActions = [];
         this.mouseMoveActions = [];
 	    this.mouseClickActions = [];
@@ -14,10 +12,8 @@ app.mouseController =  function () {
         this.mousepos = vec2.create();
         this.canvasOffset = vec2.create();
     };
-
-    var p = mouseController.prototype;
-
-    p.init = function () {
+    
+    init() {
         var _this = this;
 
         window.addEventListener("mousedown", function(e){
@@ -40,23 +36,23 @@ app.mouseController =  function () {
         });
     };
 
-	p.assignMouseDownAction = function (action) {
+	assignMouseDownAction(action) {
 		this.mouseDownActions.push(action);
 	};
 
-    p.assignMouseClickAction = function (action) {
+    assignMouseClickAction(action) {
         this.mouseClickActions.push(action);
     };
 
-    p.assignMouseMoveAction = function (action) {
+    assignMouseMoveAction(action) {
         this.mouseMoveActions.push(action);
     };
 
-    p.setCanvasOffset = function (viewport) {
+    setCanvasOffset(viewport) {
         this.canvasOffset = vec2.fromValues(-viewport.left, -viewport.top);
     };
 
-    p.update = function (object) {
+    update(object) {
         if (this.once)
         {
             for (var action in this.mouseClickActions) {
@@ -78,14 +74,11 @@ app.mouseController =  function () {
         }
     };
 
-    p.mousePosition = function () {
+    mousePosition() {
         return this.mousepos;
     };
 
-    p.canvasMousePosition = function () {
+    canvasMousePosition() {
         return vec2.fromValues(this.mousepos[0] - this.canvasOffset[0], this.mousepos[1] - this.canvasOffset[1]);
     }
-
-    return mouseController;
-
-}();
+};

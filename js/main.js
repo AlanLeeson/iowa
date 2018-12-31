@@ -18,18 +18,15 @@ app.Main = {
 
 	//var used for finding dt
 	updatedTime : 0,
-	ratio : undefined,
 
 	updating : false,
 
 	init : function(){
 
 		/*** Assign the canvas and the canvas context ***/
-		this.ratio = 400/400;
 		this.canvas = document.querySelector('canvas');
 
 		this.canvas.style.width = this.clamp(window.innerWidth, 0, 1400) + 'px';
-    	//this.canvas.style.height = (window.innerHeight * this.ratio) + 'px';
 		this.canvas.height = this.canvas.width * this.canvas.clientHeight / this.canvas.clientWidth;
 		this.ctx = this.canvas.getContext('2d');
 
@@ -40,17 +37,17 @@ app.Main = {
 		var room = {
 			width: 2000,
 			height: 1000,
-			map: new app.Map(2000, 1000)
+			map: new Map(2000, 1000)
 		};
 		room.map.generate(this.ctx);
 
 		/*** Set up the game object which holds game logic and states. ***/
 		this.screenBounds = {width : this.canvas.width, height: this.canvas.height};
-		this.gameObject = new app.GameObject();
+		this.gameObject = new GameObject();
 		this.gameObject.setCurrentState("MENU");
 
 		/*** Set up a generic keyboard controller to handle customizable inputs ***/
-		var keyboardController = new app.KeyboardController();
+		var keyboardController = new KeyboardController();
 		keyboardController.assignKeyAction(["r"], function(gameObject)
 		{
 			if(gameObject.getCurrentState() === gameObject.states.PLAY)
@@ -77,7 +74,7 @@ app.Main = {
 		this.gameObject.setController(keyboardController);
 
 		/*** Initialize menu ***/
-		this.menu = new app.Menu("main", vec2.fromValues(this.screenBounds.width / 2, this.screenBounds.height / 2));
+		this.menu = new Menu("main", vec2.fromValues(this.screenBounds.width / 2, this.screenBounds.height / 2));
 		this.menu.addText({
 			"text" : "Press \"m\" to Play",
 			"xPos" : (this.screenBounds.width / 3),
@@ -93,7 +90,7 @@ app.Main = {
 		this.gameObject.setWorld(this.world);
 
 		/*** Create a Player ***/
-		var player = new app.PlayerEntity(
+		var player = new PlayerEntity(
 				200, 200,
 				[
 					vec2.fromValues(0,0),
@@ -104,7 +101,7 @@ app.Main = {
 					vec2.fromValues(0,30)
 				],
 				app.draw.randomRGBA(100,0), 1, 'moveable');
-		var playerController = new app.KeyboardController();
+		var playerController = new KeyboardController();
 		playerController.assignKeyAction([ "a", "ArrowLeft" ], function(entity)
 		{
 			entity.moveLeft([vec2.fromValues(-0.3, 0)]);
@@ -150,7 +147,7 @@ app.Main = {
 
 		/*** Create world blocks ***/
 		var bw = 100;
-		var left_wall = new app.Entity(0,0,
+		var left_wall = new Entity(0,0,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(bw,0),
@@ -159,7 +156,7 @@ app.Main = {
 			],
 			"#000",1,"static");
 		this.world.addEntity(left_wall)
-		var top_wall = new app.Entity(0,0,
+		var top_wall = new Entity(0,0,
 			[
 				vec2.fromValues(bw,0),
 				vec2.fromValues(room.width,0),
@@ -168,7 +165,7 @@ app.Main = {
 			],
 			"#000",1,"static");
 		this.world.addEntity(top_wall)
-		var right_wall = new app.Entity(0,0,
+		var right_wall = new Entity(0,0,
 			[
 				vec2.fromValues(room.width - bw,bw),
 				vec2.fromValues(room.width,bw),
@@ -177,7 +174,7 @@ app.Main = {
 			],
 			"#000",1,"static");
 		this.world.addEntity(right_wall)
-		var bottom_wall = new app.Entity(0,0,
+		var bottom_wall = new Entity(0,0,
 			[
 				vec2.fromValues(bw,room.height - bw),
 				vec2.fromValues(room.width - bw,room.height - bw),
@@ -187,7 +184,7 @@ app.Main = {
 			"#000",1,"static");
 		this.world.addEntity(bottom_wall)
 
-		var middle_structure = new app.Entity(100,500,
+		var middle_structure = new Entity(100,500,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(room.width - 300,0),
@@ -197,7 +194,7 @@ app.Main = {
 			"#000",1,"static");
 		this.world.addEntity(middle_structure)
 
-		var first_block = new app.Entity(400, 300,
+		var first_block = new Entity(400, 300,
 			[
 				vec2.fromValues(-50,-50),
 				vec2.fromValues(0,-75),
@@ -222,7 +219,7 @@ app.Main = {
 		});
 		this.world.addEntity(first_block);
 
-		var npc = new app.Entity(600, 260,
+		var npc = new Entity(600, 260,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(15,0),
@@ -235,7 +232,7 @@ app.Main = {
 		});
 		this.world.addEntity(npc);
 
-		var npc2 = new app.Entity(800, 260,
+		var npc2 = new Entity(800, 260,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(15,0),
@@ -248,7 +245,7 @@ app.Main = {
 		});
 		this.world.addEntity(npc2);
 
-		var stationary = new app.Entity(600, 160,
+		var stationary = new Entity(600, 160,
 			[
 				vec2.fromValues(0,0),
 				vec2.fromValues(15,10),
@@ -261,7 +258,7 @@ app.Main = {
 		this.world.addEntity(stationary);
 
 		/*** Initialize the camera ***/
-		var camera = new app.Camera(this.ctx);
+		var camera = new Camera(this.ctx);
 		camera.followEntity(player);
 		this.world.setCamera(camera);
 		this.world.setRoom(room);

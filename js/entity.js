@@ -1,14 +1,11 @@
 "use strict";
 
-var app = app || {};
-
-app.Entity = function(){
-
-	var Entity = function(x,y,vertices,col,mass,type,friction = 1){
+class Entity {
+	constructor(posX, posY, vertices, colour, mass, type, friction = 1) {
 		this.type = type;
-		this.col = col;
+		this.colour = colour;
 
-		this.location = vec2.fromValues(x,y);
+		this.location = vec2.fromValues(posX,posY);
 		this.velocity = vec2.create();
 		this.acceleration = vec2.create();
 		this.movementSpeed = mass;
@@ -25,29 +22,27 @@ app.Entity = function(){
 		this.removeCondition = null;
 		this.listeners = [];
 		this.friction = friction;
-	};
-
-	var p = Entity.prototype;
-
-	p.updateEntityEvent = function(){
+	}
+	
+	updateEntityEvent() {
 		for(var i = 0; i < this.listeners.length; i++){
 			this.listeners[i].doUpdateEntityEvent(this);
 		}
 	}
-
-	p.addUpdateListener = function(listener){
+	
+	addUpdateListener(listener) {
 		this.listeners.push(listener);
 	}
 
-	p.setSprite = function(sprite){
+	setSprite(sprite) {
 		this.sprite = sprite;
 	}
 
-	p.getLocation = function(){
+	getLocation(){
 		return this.location;
 	}
 
-	p.getPolygon = function(){
+	getPolygon(){
 		var polygon = [];
 
 		for(var i = 0; i < this.vertices.length; i++)
@@ -57,11 +52,10 @@ app.Entity = function(){
 					this.vertices[i][0] + this.location[0],
 					this.vertices[i][1] + this.location[1]));
 		}
-
 		return polygon;
 	}
-
-	p.getCenter = function(){
+	
+	getCenter(){
 		var x_sum = 0;
 		var y_sum = 0;
 
@@ -75,36 +69,35 @@ app.Entity = function(){
 		return vec2.fromValues(x_sum / this.vertices.length,y_sum / this.vertices.length);
 	}
 
-
-	p.setController = function(controller){
+	setController(controller) {
 		this.controller = controller;
 		this.controller.init();
 	};
 
-	p.setRemoveCondition = function(removeCondition){
+	setRemoveCondition(removeCondition) {
 		this.updateEntityEvent();
 
 		this.removeCondition = removeCondition;
 	};
 
-	p.setCollisionResolution = function(collisionResolution){
+	setCollisionResolution(collisionResolution) {
 		this.updateEntityEvent();
 
 		this.collisionResolution = collisionResolution;
 	};
 
-	p.setCustomLogic = function(customLogic){
+	setCustomLogic(customLogic) {
 		this.customLogic = customLogic;
 	}
 
-	p.canRemove = function(){
+	canRemove() {
 		if (this.removeCondition !== null) {
 			return this.removeCondition();
 		} else
 			return false;
 	};
 
-	p.update = function(dt, entities){
+	update(dt, entities) {
 		if(this.controller !== null){
 			this.controller.update(this);
 		}
@@ -140,22 +133,20 @@ app.Entity = function(){
 				break;
 		}
 	};
-
-	p.render = function(ctx){
+	
+	render(ctx) {
 		if(this.sprite != null){this.sprite.render(ctx, this.location); }
-		app.draw.polygon(ctx,this.location[0],this.location[1],this.vertices,this.col);
+		app.draw.polygon(ctx,this.location[0],this.location[1],this.vertices,this.colour);
 	};
 
-	p.applyWorldForces = function(wolrdForces){
+	applyWorldForces(wolrdForces) {
 		for(var i = 0; i < wolrdForces.length; i ++){
 			applyForce(wolrdForces[i], this.acceleration);
 		}
 	};
 
-	p.applyForce = function(force){
+	applyForce(force) {
 		applyForce(force, this.acceleration);
 	};
 
-	return Entity;
-
-}();
+} 

@@ -1,10 +1,8 @@
 "use strict";
 
-var app = app || {};
+class Menu {
 
-app.Menu = function(){
-
-	var Menu = function(type, size){
+	constructor(type, size){
 		this.type = type;
 		this.controller = null;
 
@@ -15,41 +13,39 @@ app.Menu = function(){
 		this.title;
 		this.backgroundSprite = undefined;
 	};
-
-	var p = Menu.prototype;
-
-	p.updateMenuEvent = function(){
+	
+	updateMenuEvent() {
 		for(var i = 0; i < this.listeners.length; i++){
 			this.listeners[i].doUpdateMenuEvent(this);
 		}
 	}
 
-	p.addButton = function(button){
+	addButton(button) {
 		this.buttons.add(button);
 	};
 
-	p.addTitle = function(title){
+	addTitle(title) {
 		this.title = title;
 	};
 
-	p.setBackgroundSprite = function(sprite){
+	setBackgroundSprite(sprite) {
 		this.backgroundSprite = sprite;
 	};
 
-	p.setController = function(controller){
+	setController(controller) {
 		this.controller = controller;
 		this.controller.init();
 	};
 
-	p.addText = function(text){
+	addText(text) {
 		this.texts.push(text);
 	};
 
-	p.update = function(dt){
+	update(dt) {
 
 	};
 
-	p.render = function(ctx){
+	render(ctx) {
 		if (this.backgroundSprite != undefined) {
 			this.backgroundSprite.render(ctx, this.size);
 		} else {
@@ -63,7 +59,4 @@ app.Menu = function(){
 			app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');
 		}
 	};
-
-	return Menu;
-
-}();
+};

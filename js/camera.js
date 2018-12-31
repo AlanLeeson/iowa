@@ -1,10 +1,8 @@
 "use strict";
 
-var app = app || {};
+class Camera {
 
-app.Camera = function(){
-
-  var Camera = function(ctx, settings) {
+  constructor(ctx, settings) {
     settings = settings || {};
     this.distance = 1250.0;
     this.lookat = [0,0];
@@ -23,9 +21,7 @@ app.Camera = function(){
     this.follow = null;
   };
 
-  var p = Camera.prototype;
-
-  p.begin = function() {
+  begin() {
       this.context.save();
       this.applyScale();
       this.applyTranslation();
@@ -34,19 +30,19 @@ app.Camera = function(){
       }
   };
 
-  p.end = function() {
+  end() {
       this.context.restore();
   };
 
-  p.applyScale = function() {
+  applyScale() {
     this.context.scale(this.viewport.scale[0], this.viewport.scale[1]);
   };
 
-  p.applyTranslation = function() {
+  applyTranslation() {
     this.context.translate(-this.viewport.left, -this.viewport.top);
   };
 
-  p.updateViewport = function() {
+  updateViewport() {
       this.aspectRatio = this.context.canvas.width / this.context.canvas.height;
       this.viewport.width = this.distance * Math.tan(this.fieldOfView);
       this.viewport.height = this.viewport.width / this.aspectRatio;
@@ -58,35 +54,32 @@ app.Camera = function(){
       this.viewport.scale[1] = this.context.canvas.height / this.viewport.height;
   };
 
-  p.zoomTo = function(z) {
+  zoomTo(z) {
       this.distance = z;
       this.updateViewport();
   };
 
-  p.moveTo = function(x, y) {
+  moveTo(x, y) {
       this.lookat[0] = x;
       this.lookat[1] = y;
       this.updateViewport();
   };
 
-  p.followEntity = function(followee){
+  followEntity(followee){
     this.follow = followee;
   };
 
-  p.screenToWorld = function(x, y, obj) {
+  screenToWorld(x, y, obj) {
       obj = obj || {};
       obj.x = (x / this.viewport.scale[0]) + this.viewport.left;
       obj.y = (y / this.viewport.scale[1]) + this.viewport.top;
       return obj;
   };
 
-  p.worldToScreen = function(x, y, obj) {
+  worldToScreen(x, y, obj) {
       obj = obj || {};
       obj.x = (x - this.viewport.left) * (this.viewport.scale[0]);
       obj.y = (y - this.viewport.top) * (this.viewport.scale[1]);
       return obj;
   };
-
-  return Camera;
-
-}();
+};
