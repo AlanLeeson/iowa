@@ -20,6 +20,12 @@ function updateLocation(velocity, acceleration, location, friction){
 	acceleration = vec2.create();
 }
 
+function updateLocationByVector(velocity, acceleration, location, friction){
+    var a = velocity * friction;
+    var b = a + acceleration;
+    return location + b;
+}
+
 function seek(location,targetLocation,velocity,maxSpeed,maxForce){
 	var desired = vec2.create();
 	vec2.subtract(desired,targetLocation,location);

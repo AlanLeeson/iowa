@@ -134,14 +134,39 @@ class MoveableEntity extends Entity {
 	update(dt, entities) {
 		super.update(dt, entities);
 		var old_location = vec2.clone(this.location);
-		updateLocation(this.velocity,this.acceleration,this.location,this.friction);
+		var location_x = updateLocationByVector(this.velocity[0],this.acceleration[0],this.location[0],this.friction);
+        var location_y = updateLocationByVector(this.velocity[1],this.acceleration[1],this.location[1],this.friction);      
+        //reset accelerations
 		this.acceleration = vec2.create();
 
+        var collision = false;
+        this.location[0] = location_x;
 		for(var i = 0; i < entities.length; i++)
 		{
 			if(entities[i] !== this)
 			{
 				if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
+                    collision = true;
+					this.location = old_location;
+					if (entities[i].collisionResolution !== null) {
+						entities[i].collisionResolution(this);
+					}
+				}
+			}
+		}
+        if(!collision)
+        {
+            old_location[0] = location_x;
+        }
+        
+        collision = false;
+        this.location[1] = location_y;
+        for(var i = 0; i < entities.length; i++)
+		{   
+			if(entities[i] !== this)
+			{
+				if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
+                    collision = true;
 					this.location = old_location;
 					if (entities[i].collisionResolution !== null) {
 						entities[i].collisionResolution(this);
