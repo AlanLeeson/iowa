@@ -37,15 +37,15 @@ class Entity {
 		return this.location;
 	}
 
-	getPolygon(){
+	getPolygon(x = this.location[0], y = this.location[1]){
 		var polygon = [];
 
 		for(var i = 0; i < this.vertices.length; i++)
 		{
 			polygon.push(
 				vec2.fromValues(
-					this.vertices[i][0] + this.location[0],
-					this.vertices[i][1] + this.location[1]));
+					this.vertices[i][0] + x,
+					this.vertices[i][1] + y));
 		}
 		return polygon;
 	}
@@ -135,19 +135,37 @@ class MoveableEntity extends Entity {
 		super.update(dt, entities);
 		var old_location = vec2.clone(this.location);
 		updateLocation(this.velocity,this.acceleration,this.location,this.friction);
+        
 		this.acceleration = vec2.create();
 
+        var poly_x = this.getPolygon(this.location[0], old_location[1]);
+        var poly_y = this.getPolygon(old_location[0], this.location[1]);
+        
+        var coll_x = false;
+        var coll_y = false;
 		for(var i = 0; i < entities.length; i++)
 		{
 			if(entities[i] !== this)
 			{
-				if(app.collision.polygonCollision(this.getPolygon(), entities[i].getPolygon())){
-					this.location = old_location;
+				if(app.collision.polygonCollision(poly_x, entities[i].getPolygon())){
+                    coll_x = true;
 					if (entities[i].collisionResolution !== null) {
 						entities[i].collisionResolution(this);
 					}
 				}
+                if(app.collision.polygonCollision(poly_y, entities[i].getPolygon())){
+                    coll_y = true;
+					if (entities[i].collisionResolution !== null) {
+						entities[i].collisionResolution(this);
+					}
+                }
 			}
 		}
+        if(coll_x){
+            this.location[0] = old_location[0];
+        }
+        if(coll_y){
+            this.location[1] = old_location[1];
+        }
 	}
 }
