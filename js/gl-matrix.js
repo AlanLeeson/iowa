@@ -375,6 +375,13 @@ vec2.distance = function(a, b) {
     return Math.sqrt(x*x + y*y);
 };
 
+vec2.distanceVector = function(a, b) {
+    var x = b[0] - a[0];
+    var y = b[1] - a[1];
+
+    return vec2.fromValues(x, y);
+}
+
 /**
  * Alias for {@link vec2.distance}
  * @function
