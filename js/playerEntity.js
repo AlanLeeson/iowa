@@ -11,6 +11,8 @@ class PlayerEntity extends MoveableEntity{
 
     	this.sprint = false;
     	this.sneak = false;
+
+      this.last_pulse = null;
 	}
 	
 	moveLeft(force) {
@@ -77,6 +79,10 @@ class PlayerEntity extends MoveableEntity{
   	stopSneak() {
     	this.sneak = false;
   	}
+
+    pulse() {
+
+    }
 
   	getTerminalVel(termVal) {
       	if(this.sprint)
