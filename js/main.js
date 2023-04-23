@@ -145,6 +145,19 @@ app.Main = {
 		{
 			entity.stopSneak();
 		});
+		var _world = this.world;
+		playerController.assignKeyAction([ "j", "J"], function (entity)
+		{
+			for(var i = 0; i < _world.numEntities(); i++)
+			{
+				var otherEntity = _world.getEntity(i);
+				distance = vec2.distance(entity.getCenter(), otherEntity.getCenter());
+				if(distance > 0 && distance < 50){
+					var force = vec2.distanceVector(entity.getCenter(), otherEntity.getCenter());
+					otherEntity.applyForce(vec2.multiplyByScalar(force, 0.25));
+				}
+			}
+		});
 		player.setController(playerController);
 		this.world.addEntity(player);
 
@@ -235,7 +248,7 @@ app.Main = {
 		first_block.setCustomLogic(function(entity){
 			if(player.sprint)
 			{
-				if(distance(entity.getCenter(), player.getCenter()) < 100){
+				if(vec2.distance(entity.getCenter(), player.getCenter()) < 100){
 					_ui.startTimedDialogue("<strong>Hey!</strong> Stop running!", 6000);
 					entity.setCustomLogic(null);
 			 }
