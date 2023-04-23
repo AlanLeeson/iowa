@@ -53,7 +53,7 @@ class Menu {
 		}
 		for(var i = 0; i < this.texts.length; i ++) {
 			var text = this.texts[i];
-			app.draw.text(ctx, text.text, text.xPos, text.yPos, text.size, text.col);
+			app.draw.text(ctx, text.text, text.xPos, text.yPos, text.size, text.col, text.alignment);
 		}
 		if (this.title != undefined) {
 			app.draw.text(ctx,this.title,100,50,30,'rgba(50,50,50,1)');

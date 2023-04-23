@@ -26,8 +26,10 @@ app.Main = {
 		/*** Assign the canvas and the canvas context ***/
 		this.canvas = document.querySelector('canvas');
 
-		this.canvas.style.width = this.clamp(window.innerWidth, 0, 1400) + 'px';
-		this.canvas.height = this.canvas.width * this.canvas.clientHeight / this.canvas.clientWidth;
+		//this.canvas.style.width = this.clamp(window.innerWidth, 0, 1400) + 'px';
+		//this.canvas.height = this.canvas.width * this.canvas.clientHeight / this.canvas.clientWidth;
+		this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
 		this.ctx = this.canvas.getContext('2d');
 
 		/*** Initialize UI ***/
@@ -77,10 +79,11 @@ app.Main = {
 		this.menu = new Menu("main", vec2.fromValues(this.screenBounds.width / 2, this.screenBounds.height / 2));
 		this.menu.addText({
 			"text" : "Press \"m\" to Play",
-			"xPos" : (this.screenBounds.width / 3),
+			"xPos" : (this.screenBounds.width / 2),
 			"yPos" : (this.screenBounds.height / 2),
 			"size" : "50",
-			"col" : app.draw.randomRGBA(100)
+			"col" : app.draw.randomRGBA(100),
+			"alignment": "center"
 		});
 		this.gameObject.setMenu(this.menu);
 
@@ -193,6 +196,26 @@ app.Main = {
 			],
 			"#000");
 		this.world.addEntity(middle_structure)
+		
+		for(var i = 0; i < 10; i ++) {
+			for(var j = 0; j < 10; j++) {
+				var block = new Entity((900 + (i * 31)), (150 + (j * 31)),
+					[
+						vec2.fromValues(-15,-15),
+						vec2.fromValues(15,-15),
+						vec2.fromValues(15,15),
+						vec2.fromValues(-15,15)
+					],
+					"#000");
+				block.setCollisionResolution(function () {
+					
+					this.setRemoveCondition(function () {
+							return true;
+					});
+				});
+				this.world.addEntity(block);
+			}
+		}
 
 		var first_block = new Entity(400, 300,
 			[
@@ -205,7 +228,8 @@ app.Main = {
 			],
 			"#3dd");
 		first_block.setCollisionResolution(function(){
-			_ui.startTimedDialogue("<strong>Hey!</strong> You think you can just <i>walk into me</i> huh? If I wasn't a <strong>block</strong> you'd be getting a piece of my mind!", 6000);
+			_ui.startTypedDialogue("<strong>Hey!</strong> You think you can just <i>walk into me</i> huh? If I wasn't a <strong>block</strong> you'd be getting a piece of my mind!", 6000);
+			first_block.setCollisionResolution(null);
 		});
 
 		first_block.setCustomLogic(function(entity){

@@ -34,10 +34,13 @@ app.draw = {
 		ctx.globalAlpha = 1.0;
 	},
 
-	text: function(ctx,string,x,y,size,col){
+	text: function(ctx, value, x, y, size, col, alignment){
 		ctx.font = 'bold ' + size + 'px veranda';
+		if (alignment) {
+			ctx.textAlign = alignment;
+		}
 		ctx.fillStyle = col;
-		ctx.fillText(string,x,y);
+		ctx.fillText(value,x,y);
 	},
 
 	line: function(ctx,x1,y1,x2,y2,w,col){
